@@ -1,38 +1,48 @@
 
 ## Analysis of the given RBAC system:
 
-Roles:
+### Roles:
+```
 [Public]
 [User]
 [Manager]
 [Admin]
+```
 
-Users of the system:
+### Users of the system:
+```
 Moe
 Larry
 Curly
 Shemp
+```
 
-Resources:
+### Resources:
+```
 Public Share (ps)
 Time Card Entry (tce)
 Performance Review (pr)
 Time Card Approval (tca)
 Site Manager (sm)
 Account Manager (am)
+```
 
-Role assignment looks like this:
+### Role assignment looks like this:
+```
 Moe is assigned to: [Public]
 Larry is assigned to role: [User], [Manager]
 Curly is assigned to role: [Public], [Manager]
 Shemp is assigned to role: [Admin]
+```
 
-After reviewing allowed access for each user, we can build following role permissions matrix:
+### After reviewing allowed access for each user, we can build following role permissions matrix:
 
+```
 Public role has access to: ps
 User role has access to: tce, am
 Manager role has access to: pr, tca
 Admin role has access to: sm, am
+```
 
 ## Vulnerability:
 
