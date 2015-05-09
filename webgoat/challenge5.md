@@ -1,7 +1,9 @@
 ## Vulnerability:
 
 There are two issues:
+
 1) There is now input validation of data provided by the user via HTML form so malicious input can be provided. In consequence reflected XSS attack is possible.
+
 2) Email receipt is controlled by the user and not validated on server-side so the malicious user can send email to arbitrary person using given HTML form.
 
 ## Exploitation:
@@ -34,4 +36,5 @@ subject=Comment+for+WebGoat&to=ciec%40owasp.org&msg=%3Cscript%3Ealert%281%29%3B%
 ## Mitigation:
 
 1) Use input validation library or implement own solution for defense against XSS attacks (OWASP ESAPI can be used or OWASP XSS Prevention Cheat Sheet as guide for implementing own solution).
+
 2) It should be possible to send email only to webgoat@owasp.org field to in HTML form is not needed or it should be validated on server-side) 
