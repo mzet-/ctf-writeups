@@ -28,7 +28,7 @@ station=102+OR+1%3D1&SUBMIT=Go%21
 
 It retrieves all DB records.
 
-Mitigation:
+## Mitigation:
 1) validate input data
 
 2) use prepared statements/stored procedures (https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet) 
