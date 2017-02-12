@@ -1,13 +1,10 @@
 ## ctf-writeups
 
-My writeups of CTFs, security challenges and 
+My writeups of various CTFs, security challenges and vulnerability testbeds.
 
 ### My profiles
 
-    - [https://rozwal.to](https://rozwal.to/profile/mzet)
-    - [https://hacking-lab.com](https://www.hacking-lab.com/user/profile/mzet/)
-    - [wechall.net](http://www.wechall.net/profile/mzet)
+- [https://rozwal.to](https://rozwal.to/profile/mzet)
+- [https://hacking-lab.com](https://www.hacking-lab.com/user/profile/mzet/)
+- [wechall.net](http://www.wechall.net/profile/mzet)
 
-### "Targets"
-
-    - [DVWA walkthru](dvwa/dvwa-low.md)
