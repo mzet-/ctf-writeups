@@ -28,4 +28,4 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
 ### 0CTF 2016 Quals
 
- [Monkey](0CTF 2016 Quals/monkey.md)
+ [Monkey](0CTF-2016-Quals/monkey.md)
