@@ -2,6 +2,10 @@
 
 My writeups of various CTFs, security challenges and vulnerability testbeds.
 
+### flaws.cloud
+
+ [flaws.cloud](flaws.cloud/flaws.cloud.md)
+
 ### hacking-lab.com
 
  [Webgoat](hacking-lab.com/webgoat/README.md)
