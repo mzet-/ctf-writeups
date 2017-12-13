@@ -2,6 +2,10 @@
 
 My writeups of various CTFs, security challenges and vulnerability testbeds.
 
+### overthewire.org
+
+ [natas](overthewire.org/natas.md)
+
 ### ropemporium.com
 
  [32bit binaries](ropemporium.com/ropemporium32.md)
