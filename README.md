@@ -2,9 +2,11 @@
 
 My writeups of various CTFs, security challenges and vulnerability testbeds.
 
-### overthewire.org
+### wechall.net
 
- [natas](overthewire.org/natas.md)
+ [wechall](wechall.net/wechall.md)
+
+ [natas](wechall.net/natas.md) (overthewire.org)
 
 ### ropemporium.com
 
