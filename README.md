@@ -24,7 +24,7 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
 ### rozwal.to
 
- [https://stary.rozwal.to/profile/mzet](https://rozwal.to/profile/mzet)
+ [my profile](https://stary.rozwal.to/profile/mzet)
 
 ### ctf.infosecinstitute.com
 
