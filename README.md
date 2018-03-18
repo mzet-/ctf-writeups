@@ -36,6 +36,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [DVWA: medium](DVWA/dvwa-medium.md)
 
+ [DVWA: hard](DVWA/dvwa-hard.md)
+
 ### exploit-exercises.com
 
  [Nebula](exploit-exercises.com/nebula.md)
