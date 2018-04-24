@@ -12,6 +12,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [32bit binaries](ropemporium.com/ropemporium32.md)
 
+ [64bit binaries](ropemporium.com/ropemporium64.md)
+
 ### flaws.cloud
 
  [flaws.cloud](flaws.cloud/flaws.cloud.md)
