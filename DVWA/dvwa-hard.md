@@ -21,3 +21,7 @@
 Trick with anchor ('#') also works here:
 
     English#<script>alert(1);</script>
+
+### XSS (Stored)
+
+Payload for `txtName` field: `<img src=x onError=alert(3)>`

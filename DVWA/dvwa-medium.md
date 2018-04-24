@@ -188,3 +188,7 @@ Payload that ilustrates vulnerability (this time filtering is done on server sid
 Or do not use 'script' tags:
 
     English</option></select><img src='x' onerror='alert(1)'>
+
+## XSS (Stored)
+
+Payload for `txtName` field: `<sCript>alert(2)</sCript>`
