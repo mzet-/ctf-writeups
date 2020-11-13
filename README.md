@@ -2,6 +2,10 @@
 
 My writeups of various CTFs, security challenges and vulnerability testbeds.
 
+### PentesterAcademy
+
+ [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
+
 ### wechall.net
 
  [wechall](wechall.net/wechall.md)
