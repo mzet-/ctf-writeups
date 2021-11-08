@@ -4,7 +4,7 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
 ### Burp Academy
 
- [Burp Academy Labs (all)](BurpAcademy/burp-academy.md)
+ [Burp Academy Labs (all)](Burp-Academy/burp-academy.md)
 
 ### Pentester Academy
 
