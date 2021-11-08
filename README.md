@@ -2,7 +2,11 @@
 
 My writeups of various CTFs, security challenges and vulnerability testbeds.
 
-### PentesterAcademy
+### Burp Academy
+
+ [Burp Academy Labs (all)](BurpAcademy/burp-academy.md)
+
+### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
 
