@@ -179,12 +179,16 @@ Make sure to always verify the existance and freshness of CSRF token.
 
 **Vulnerability**
 
+An example of badly implemented anti CSRF mechanism. CSRF token is in place but tokens arge generated in one global pool and are valid for every session. 
+
 **Exploitation**
 
 1. Log in as a `carlos` user
 2. Retrieve CSRF token for `carlos` with (where SESSION) is value of `carlos` session id:
 
-    $ curl -s --cookie session=SESSION https://acd81fd81e79befec0c22e7b00da004e.web-security-academy.net/my-account | grep \"csrf | awk -F"value" '{print $2}' | cut -d '"' -f2
+```
+$ curl -s --cookie session=SESSION https://acd81fd81e79befec0c22e7b00da004e.web-security-academy.net/my-account | grep \"csrf | awk -F"value" '{print $2}' | cut -d '"' -f2
+```
 
 3. Prepare CSRF bait site with the following content (where `TOKEN` is an aoutput from command from [2]):
 
