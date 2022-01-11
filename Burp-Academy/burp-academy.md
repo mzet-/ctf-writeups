@@ -1,5 +1,5 @@
 
-### Lab: <LAB-NAME-HERE>
+### Lab: LAB-NAME-HERE
 
 **Target**
 
@@ -8,6 +8,8 @@
 **Exploitation**
 
 **Mitigation**
+
+&nbsp
 
 ### Lab: Forced OAuth profile linking
 
@@ -77,7 +79,7 @@ Payload:
 
 **Target**
 
-   https://portswigger.net/web-security/csrf/lab-no-defenses
+    https://portswigger.net/web-security/csrf/lab-no-defenses
 
 **Vulnerability**
 
@@ -113,7 +115,7 @@ Use anti CSRF mechanism offered by the web framework you're using. Alternatively
 
 **Target**
 
-   https://portswigger.net/web-security/csrf/lab-token-validation-depends-on-request-method
+    https://portswigger.net/web-security/csrf/lab-token-validation-depends-on-request-method
 
 **Vulnerability**
 
@@ -123,7 +125,9 @@ An example of badly implemented anti CSRF mechanism. CSRF token is in place but 
 
 1. Prepare CSRF bait site with the following content:
 
-   <img src="https://ac721fed1e1e6c0bc062176100e300f5.web-security-academy.net/my-account/change-email?email=abc5%40xyz.com">
+```
+<img src="https://ac721fed1e1e6c0bc062176100e300f5.web-security-academy.net/my-account/change-email?email=abc5%40xyz.com">
+```
 
 2. Trick a victim to vist the prepared site.
 
