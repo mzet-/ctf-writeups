@@ -135,7 +135,7 @@ An example of badly implemented anti CSRF mechanism. CSRF token is in place but 
 Make sure to always verify the existance and freshness of CSRF token.
 
 
-### Lab: CSRF vulnerability with no defenses
+### Lab: CSRF where token validation depends on token being present
 
 **Target**
 
