@@ -8,7 +8,11 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [OAuth authentication](Burp-Academy/burp-academy.md#oauth-authentication)
 
+ [XML external entity (XXE) injection](Burp-Academy/burp-academy.md#xml-external-entity-xxe-injection)
+
  [Cross-site request forgery (CSRF)](Burp-Academy/burp-academy.md#cross-site-request-forgery-csrf)
+
+ [Access control vulnerabilities](Burp-Academy/burp-academy.md#access-control-vulnerabilities)
 
 ### Pentester Academy
 
