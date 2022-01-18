@@ -6,6 +6,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [Burp Academy Labs (all)](Burp-Academy/burp-academy.md)
 
+ [OAuth authentication](Burp-Academy/burp-academy.md#oauth-authentication
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
