@@ -8,6 +8,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [OAuth authentication](Burp-Academy/burp-academy.md#oauth-authentication)
 
+ [Cross-site request forgery (CSRF)](Burp-Academy/burp-academy.md#cross-site-request-forgery-csrf)
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
