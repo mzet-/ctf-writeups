@@ -14,6 +14,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [Access control vulnerabilities](Burp-Academy/burp-academy.md#access-control-vulnerabilities)
 
+ [HTTP Host header attacks](Burp-Academy/burp-academy.md#http-host-header-attack)
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
