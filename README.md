@@ -18,6 +18,22 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [SSRF](Burp-Academy/burp-academy.md#ssrf)
 
+ [CORS](Burp-Academy/burp-academy.md#cors)
+
+ [OS command injection](Burp-Academy/burp-academy.md#os-command-injection)
+
+ [Directory traversal](Burp-Academy/burp-academy.md#directory-traversal)
+
+ [Insecure deserialization](Burp-Academy/burp-academy.md#insecure-deserialization)
+
+ [File upload vulnerabilities](Burp-Academy/burp-academy.md#file-upload-vulnerabilities)
+
+ [Business logic vulnerabilities](Burp-Academy/burp-academy.md#business-logic-vulnerabilities)
+
+ [WebSockets](Burp-Academy/burp-academy.md#websockets)
+
+ [Clickjacking](Burp-Academy/burp-academy.md#clickjacking)
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
