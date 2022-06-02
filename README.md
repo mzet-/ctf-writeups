@@ -6,6 +6,10 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [Burp Academy Labs (all)](Burp-Academy/burp-academy.md)
 
+ [SQL injection (SQLi)](Burp-Academy/burp-academy.md#sql-injection)
+
+ [XSS](Burp-Academy/burp-academy.md#xss)
+
  [OAuth authentication](Burp-Academy/burp-academy.md#oauth-authentication)
 
  [XML external entity (XXE) injection](Burp-Academy/burp-academy.md#xml-external-entity-xxe-injection)
