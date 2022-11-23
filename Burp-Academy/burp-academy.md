@@ -1348,13 +1348,13 @@ curl -L -k -x 127.0.0.1:8080 --cookie 'session=jhDhbpkpWYLfS9HVTLGS6pDBh6PydHYo'
 
 **Discovery**
 
-    Modify `sub` field in JWT's payload. Request `GET /my-account`. Observe that your username has changed.
+Modify `sub` field in JWT's payload. Request `GET /my-account`. Observe that your username has changed.
 
 **Exploitation**
 
-    Modify `sub` field in JWT's payload to `administrator`. Request `GET /admin/delete?username=carlos`.
+Modify `sub` field in JWT's payload to `administrator`. Request `GET /admin/delete?username=carlos`.
 
 **Mitigation**
 
-    Verify JWT signature on the backend and reject all requests with invalid signature.
+Verify JWT signature on the backend and reject all requests with invalid signature.
 
