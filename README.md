@@ -38,6 +38,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [Clickjacking](Burp-Academy/burp-academy.md#clickjacking)
 
+ [JWT](Burp-Academy/burp-academy.md#jwt)
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)

