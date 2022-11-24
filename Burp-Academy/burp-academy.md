@@ -1358,3 +1358,22 @@ Modify `sub` field in JWT's payload to `administrator`. Request `GET /admin/dele
 
 Verify JWT signature on the backend and reject all requests with invalid signature.
 
+### Lab: JWT authentication bypass via flawed signature verification
+
+**Target**
+
+    https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-flawed-signature-verification
+
+**Discovery**
+
+Modify `alg` field in JWT's payload to `null`. Request `GET /my-account`. Observe that your request was accepted.
+
+**Exploitation**
+
+Modify `sub` field in JWT's payload to `administrator`. Modify `alg` field in JWT's payload to `null`. Request `GET /admin/delete?username=carlos`.
+
+**Mitigation**
+
+Require JWT signature on the backend and reject requests with `null` signature.
+
+
