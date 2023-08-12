@@ -1500,6 +1500,11 @@ Solution steps:
 
     https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-flawed-enforcement-of-business-rules
 
+Solution:
+
+1. Signup for the newsletter with `POST /sign-up`, new promo code will be received.
+2. Add promo codes alternately till the product will be affordable
+
 ## WebSockets
 
 ### Lab: Manipulating WebSocket messages to exploit vulnerabilities
@@ -1631,3 +1636,26 @@ productId=<foo+xmlns%3axi%3d"http%3a//www.w3.org/2001/XInclude"><xi%3ainclude+pa
 ### Lab: Limit overrun race conditions
 
     https://portswigger.net/web-security/race-conditions/lab-race-conditions-limit-overrun
+
+Solution:
+
+Apply promo code multiple times sending 15 or so requests in paralell:
+
+```
+POST /cart/coupon HTTP/2
+...
+csrf=<CSRF_TOKEN>&coupon=PROMO20
+```
+
+## GraphQL API vulnerabilities
+ 
+### Lab: Accessing private GraphQL posts
+
+    https://portswigger.net/web-security/graphql/lab-graphql-reading-private-posts
+
+Solution:
+
+1. Notice that `getAllPosts` GraphQL command fetches sequential blog posts IDs without `id=3`
+2. Use InQL extension to modify query to get blog post with `id=3` - but no password there
+3. Scan with Burp Scanner grapQL endpoint `/graphql/v1` notice in schema that `BlogPost` command has `postPassword` field
+4. Use InQL extension to modify query to get blog post with `id=3` and add `postPassword` field to the query
