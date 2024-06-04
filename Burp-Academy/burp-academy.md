@@ -1884,3 +1884,25 @@ Solution:
 2. Use InQL extension to modify query to get blog post with `id=3` - but no password there
 3. Scan with Burp Scanner grapQL endpoint `/graphql/v1` notice in schema that `BlogPost` command has `postPassword` field
 4. Use InQL extension to modify query to get blog post with `id=3` and add `postPassword` field to the query
+
+## API testing
+
+### Lab: Exploiting an API endpoint using documentation
+
+    https://portswigger.net/web-security/api-testing/lab-exploiting-api-endpoint-using-documentation
+
+Solution:
+
+1. Log in with provided creds
+2. visit API docs at `/api/openapi.json` and look for the way to delete user
+3. Delete user:
+
+```
+cat> r.hurl <<EOF
+DELETE https://0aae00c9035d10ac82f4061600520093.web-security-academy.net/api/user/wiener
+Cookie: session=LIa7duJhJjvnCe7uqczKBftChwe65RQJ
+HTTP/2 200
+EOF
+
+hurl -k -x 127.0.0.1:8080 r.hurl --output -
+```
