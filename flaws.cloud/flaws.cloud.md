@@ -36,7 +36,7 @@ $ git checkout f7cebc46b471ca9838a0bdd1074bb498a3f84c87
 $ cat secret.txt
 # create new profile with found AWS keys & list all available buckets for this account:
 $ aws configure --profile flaws.cloud
-$ aws --profile flaws s3 ls
+$ aws --profile flaws.cloud s3 ls
 ```
 
 ### Level 4: http://level4-1156739cfb264ced6de514971a4bef68.flaws.cloud
