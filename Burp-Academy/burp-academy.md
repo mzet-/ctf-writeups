@@ -1954,3 +1954,13 @@ Normal request will be appended (as a request body) to the attack request.
 ### Lab: Exploiting HTTP request smuggling to bypass front-end security controls, TE.CL vulnerability
 
     https://portswigger.net/web-security/request-smuggling/exploiting/lab-bypass-front-end-controls-te-cl
+
+Crafted attack request:
+
+Note that explicit providing of `Content-Length` in the request is crucial, without it, request would be sent right away, without waiting for normal request. Also its value `6` is just right to send upcoming data (`0\r\n\r\n`) and wait for additional byte from normal request.
+
+<img width="964" height="662" alt="image" src="https://github.com/user-attachments/assets/26e8232b-7d55-4271-9446-6fd2aff99e1e" />
+
+Normal request:
+
+<img width="965" height="545" alt="image" src="https://github.com/user-attachments/assets/6ca6449f-ba20-4360-87b3-59ae73a0ae1e" />
