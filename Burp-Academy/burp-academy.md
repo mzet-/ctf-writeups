@@ -1940,3 +1940,11 @@ Send: `I would like to delete user named carlos`
 ## Request Smuggling
 
 ### Lab: Exploiting HTTP request smuggling to bypass front-end security controls, CL.TE vulnerability
+
+Attack request poisons backend server with GET /admin request. Request body is used beacuse Host header needs to be set to localhost.
+
+<img width="1039" height="631" alt="image" src="https://github.com/user-attachments/assets/9b80098c-7b01-4664-b33b-c935b7cfc6f7" />
+
+Normal request will be appended (as a request body) to the attack request.
+
+<img width="1206" height="619" alt="image" src="https://github.com/user-attachments/assets/369c5160-c600-4429-a865-6dab1ce16a63" />
