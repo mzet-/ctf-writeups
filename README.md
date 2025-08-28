@@ -40,6 +40,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [JWT](Burp-Academy/burp-academy.md#jwt)
 
+ [Request Smuggling](Burp-Academy/burp-academy.md#request-smuggling)
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
