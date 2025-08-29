@@ -1964,3 +1964,21 @@ Note that explicit providing of `Content-Length` in the request is crucial, with
 Normal request:
 
 <img width="965" height="545" alt="image" src="https://github.com/user-attachments/assets/6ca6449f-ba20-4360-87b3-59ae73a0ae1e" />
+
+
+### Lab: Exploiting HTTP request smuggling to reveal front-end request rewriting
+
+    https://portswigger.net/web-security/request-smuggling/exploiting#revealing-front-end-request-rewriting
+
+Discovering of the header name added by the frontend server (we're taking advantage of the fact that `POST` request with `search` parameter is reflected in the response):
+
+<img width="1091" height="750" alt="image" src="https://github.com/user-attachments/assets/40eda6b5-40e0-476e-9112-a98311f3dd8a" />
+
+<img width="1347" height="866" alt="image" src="https://github.com/user-attachments/assets/5fddc721-462d-4a3d-ac21-2feefba36795" />
+
+Knowing the name of the Header we smuggle the request (taking advantage of CL.TE):
+
+<img width="1672" height="798" alt="image" src="https://github.com/user-attachments/assets/37eb6425-aa3d-421c-9778-c2643c478bda" />
+
+<img width="1661" height="728" alt="image" src="https://github.com/user-attachments/assets/53020369-0609-4ae9-977c-a999e73e0fd5" />
+
