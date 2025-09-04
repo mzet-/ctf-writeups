@@ -1982,3 +1982,20 @@ Knowing the name of the Header we smuggle the request (taking advantage of CL.TE
 
 <img width="1661" height="728" alt="image" src="https://github.com/user-attachments/assets/53020369-0609-4ae9-977c-a999e73e0fd5" />
 
+### Lab: Exploiting HTTP request smuggling to capture other users' requests
+
+    https://portswigger.net/web-security/request-smuggling/exploiting/lab-capture-other-users-requests
+
+Attack request:
+
+Some trials and errors are required to fine tune `Content-Length` value.
+
+<img width="1346" height="713" alt="image" src="https://github.com/user-attachments/assets/afff6ce6-28c1-4d07-9737-d5e0abe74e59" />
+
+For normal request I just refreshed the site for a given blog post (for testing purposes only). For actual attack normal request is triggered by the victim, as shown below (notice `(Victim)` string):
+
+<img width="1469" height="861" alt="image" src="https://github.com/user-attachments/assets/f0500a6c-5d68-41ec-a078-3af161eac0d2" />
+
+With captured cookies, we can access `/my-account` endpoint:
+
+<img width="1374" height="691" alt="image" src="https://github.com/user-attachments/assets/e6fd0dd5-d04c-42c9-8c62-714d00bfd1b0" />
