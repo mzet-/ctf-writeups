@@ -1836,6 +1836,37 @@ Modify `sub` field in JWT's payload to `administrator`. Modify `alg` field in JW
 
 Require JWT signature on the backend and reject requests with `null` signature.
 
+### Lab: JWT authentication bypass via weak signing key
+
+    https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-weak-signing-key
+
+<img width="903" height="712" alt="image" src="https://github.com/user-attachments/assets/c29618d5-a302-4032-b385-7ffdbaf6af40" />
+
+### Lab: JWT authentication bypass via jwk header injection
+
+    https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-jwk-header-injection 
+
+**Solution**
+
+Go to the JWT Editor Keys tab in Burp's main tab bar.
+
+Click New RSA Key.
+
+In the dialog, click Generate to automatically generate a new key pair, then click OK to save the key. Note that you don't need to select a key size as this will automatically be updated later.
+
+Go back to the GET /admin request in Burp Repeater and switch to the extension-generated JSON Web Token tab.
+
+In the payload, change the value of the sub claim to administrator.
+
+At the bottom of the JSON Web Token tab, click Attack, then select Embedded JWK. When prompted, select your newly generated RSA key and click OK.
+
+In the header of the JWT, observe that a jwk parameter has been added containing your public key.
+
+Send the request. Observe that you have successfully accessed the admin panel.
+
+In the response, find the URL for deleting carlos (/admin/delete?username=carlos). Send the request to this endpoint to solve the lab.
+
+
 ## Essential skills
 
 ### Lab: Discovering vulnerabilities quickly with targeted scanning
