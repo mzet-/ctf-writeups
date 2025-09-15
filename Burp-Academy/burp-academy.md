@@ -1866,6 +1866,29 @@ Send the request. Observe that you have successfully accessed the admin panel.
 
 In the response, find the URL for deleting carlos (/admin/delete?username=carlos). Send the request to this endpoint to solve the lab.
 
+### Lab: JWT authentication bypass via jku header injection
+
+    https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-jku-header-injection
+
+JWT mechanism uses public key signature. `jku` parameter is used to provide verification key.
+
+1. Generate public key pair (JWK Editor Burp extension allows to generate it)
+2. Serve the public key from (1):
+
+<img width="1237" height="1016" alt="image" src="https://github.com/user-attachments/assets/9f3f85e3-1681-4160-b711-5cbc85d412bd" />
+
+3. Modify content of JWT's payload and sign it using private key of key pair from (1)
+
+ <img width="1451" height="819" alt="image" src="https://github.com/user-attachments/assets/a8e0c5e6-206c-42ba-aa1b-7ef718b738bb" />
+
+## Lab: JWT authentication bypass via kid header path traversal
+
+`kid` is used as a filename on a server's filesystem. We use `/dev/null` to use empty string as a key and then sign the JWT using empty string.
+
+    https://portswigger.net/web-security/jwt/lab-jwt-authentication-bypass-via-kid-header-path-traversal
+
+<img width="1706" height="876" alt="image" src="https://github.com/user-attachments/assets/990aeb8f-1763-4dfb-9eec-dc07e4826c45" />
+
 
 ## Essential skills
 
