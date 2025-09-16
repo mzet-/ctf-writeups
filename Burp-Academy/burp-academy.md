@@ -1534,6 +1534,26 @@ Solution (as previously but explicitly spoof `Content-Type`):
 
     curl --cookie 'session=tGHaK4JFRKUYlLN6LiAJi0kyAr3uPPpy' -s https://ac2b1f8e1e792d53c084231a00e50037.web-security-academy.net/files/avatars/s.php
 
+### Lab: Web shell upload via path traversal
+
+    https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-path-traversal
+
+`../` is filtered, URL encode it to bypass this filtering:
+
+<img width="1524" height="802" alt="image" src="https://github.com/user-attachments/assets/ec16db0c-a37b-4522-813f-5d3fc6d0a4e5" />
+
+
+### Lab: Web shell upload via extension blacklist bypass
+
+    https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-extension-blacklist-bypass
+
+It is not possible to upload `.php` files but `.php5` files are allowed. Server is misconfigured and it is possible to upload and overwirte `.htaccess` file:
+
+<img width="1481" height="802" alt="image" src="https://github.com/user-attachments/assets/fbbddecf-be69-42fc-9b59-106836fb5fde" />
+
+<img width="1457" height="782" alt="image" src="https://github.com/user-attachments/assets/53e18379-5c07-44aa-9f58-4c08847c88e0" />
+
+
 ## Business logic vulnerabilities
 
 ### Lab: Excessive trust in client-side controls
