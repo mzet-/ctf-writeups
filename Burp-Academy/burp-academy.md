@@ -1553,6 +1553,14 @@ It is not possible to upload `.php` files but `.php5` files are allowed. Server 
 
 <img width="1457" height="782" alt="image" src="https://github.com/user-attachments/assets/53e18379-5c07-44aa-9f58-4c08847c88e0" />
 
+## Lab: Web shell upload via obfuscated file extension
+
+    https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-obfuscated-file-extension
+
+Solution:
+
+<img width="1467" height="804" alt="image" src="https://github.com/user-attachments/assets/84019b52-8dfe-4522-9a4f-8c7c54c0e8b0" />
+
 
 ## Business logic vulnerabilities
 
