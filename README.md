@@ -42,6 +42,8 @@ My writeups of various CTFs, security challenges and vulnerability testbeds.
 
  [Request Smuggling](Burp-Academy/burp-academy.md#request-smuggling)
 
+ [SQL injection (DOM-based issues)](Burp-Academy/burp-academy.md#dom-based-issues)
+
 ### Pentester Academy
 
  [JS for Pentesters](PentesterAcademy/js-for-pentesters.md)
