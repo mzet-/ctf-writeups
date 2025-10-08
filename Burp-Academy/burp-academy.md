@@ -2249,7 +2249,7 @@ Entice victim to visit web site with following content:
 
 Detecting: find directory that is cached: `/resources/`
 
-Detecting discrepancies in how the cache and origin server interpret characters as delimiters:
+Detecting discrepancies in how the cache and origin server conducts URL normalization:
 
 Cache server gives identical responses for following two requests:
 
