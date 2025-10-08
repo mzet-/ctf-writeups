@@ -2269,6 +2269,8 @@ We detected discrepancy: cache server resolves encoded `/` character (`%2f`) and
 
 Detecting delimeter character that works on origin server but does not work on cache server (for payload list use delimeters from: `https://portswigger.net/web-security/web-cache-deception/wcd-lab-delimiter-list`:
 
+<img width="1386" height="712" alt="image" src="https://github.com/user-attachments/assets/b292d25b-5d1b-4470-a8c1-5423a85adcaa" />
+
 
 Solution:
 
